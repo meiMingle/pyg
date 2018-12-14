@@ -10,12 +10,12 @@
     <!-- 本项目在dubbox中的名称 -->
     <dubbo:application name="HelloApp"/>
     <!-- 注册中心地址 -->
-    <dubbo:registry address="zookeeper://192.168.25.131:2181"/>
+    <dubbo:registry address="zookeeper://192.168.25.133:2181"/>
     <!-- 暴露服务的协议配置：
           name：暴露服务的协议名，支持dubbo、rmi、hessian、http、webservice、thrift、redis等，官方推荐使用dubbo
           port：暴露服务的端口号，默认20880
      -->
-    <dubbo:protocol name="dubbo" port="20881"/>
+    <dubbo:protocol name="dubbo" port="20880"/>
     <!-- xml配置方式
        integerface：要发布的接口全路径
        ref：接口实现类实例

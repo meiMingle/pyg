@@ -8,9 +8,9 @@
         http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
     <!-- 本项目在dubbox中的名称 -->
-    <dubbo:application name="HelloApp2"/>
+    <dubbo:application name="SayApp"/>
     <!-- 注册中心地址 -->
-    <dubbo:registry address="zookeeper://192.168.25.131:2181"/>
+    <dubbo:registry address="zookeeper://192.168.25.133:2181"/>
 
     <!--注意这里要有id，如果没有，会爆出异常：NoSuchBeanDefinitionException: No bean named 'helloService'-->
     <dubbo:reference id="helloService" interface="com.pinyougou.dubbox.provider.service.HelloService"/>
