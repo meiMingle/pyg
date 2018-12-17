@@ -2,10 +2,13 @@
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
     <plugins>
+        <!--当前pageheper5.1.2版本，自4.0.0版本以后就不再实现这个接口了，转而实现这个接口：org.apache.ibatis.plugin.Interceptor-->
+        <!--<plugin interceptor="com.github.pagehelper.PageHelper">-->
         <!-- com.github.pagehelper 为 PageHelper 类所在包名 -->
-        <plugin interceptor="com.github.pagehelper.PageHelper">
+        <plugin interceptor="com.github.pagehelper.PageInterceptor">
             <!-- 设置数据库类型 Oracle,Mysql,MariaDB,SQLite,Hsqldb,PostgreSQL 六种数据库-->
-            <property name="dialect" value="mysql"/>
+            <!--4.0.0以后的版本支持自动识别使用的数据库，可以不用配置-->
+            <!--<property name="dialect" value="mysql"/>-->
         </plugin>
     </plugins>
 </configuration>
