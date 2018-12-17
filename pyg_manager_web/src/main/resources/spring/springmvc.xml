@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
-       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:dubbo="http://code.alibabatech.com/schema/dubbo" xmlns:mvc="http://www.springframework.org/schema/mvc"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
-        http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd
-        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+        http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
 
     <mvc:annotation-driven>
@@ -25,9 +23,11 @@
 
     <mvc:default-servlet-handler/>
 
-    <!-- 引用dubbo 服务 -->
+    <!-- 消费方应用名，用于计算依赖关系，不是匹配条件，不要与提供方一样 -->
     <dubbo:application name="pinyougou-manager-web"/>
-    <dubbo:registry address="zookeeper://192.168.25.133:2181"/>
+    <!-- 使用zookeeper广播注册中心 暴露服务地址 -->
+    <dubbo:registry protocol="zookeeper" address="zookeeper://192.168.25.133:2181" check="false"/>
+    <!--开启dubbo注解支持，扫描@Refrence-->
     <dubbo:annotation package="com.pinyougou.manager.controller"/>
 
 </beans>

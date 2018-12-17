@@ -12,12 +12,12 @@ import java.util.List;
 @Service
 @Transactional
 public class TbBrandServiceImpl implements TbBrandService {
+
     @Resource
     private TbBrandMapper tbBrandMapper;
 
     public List<TbBrand> findAll() {
         return tbBrandMapper.findAll();
     }
-
 
 }

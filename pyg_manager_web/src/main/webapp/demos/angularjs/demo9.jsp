@@ -25,20 +25,27 @@
 </head>
 <body ng-app="myapp" ng-controller="myController" ng-init="username='Pa'">
 
-<%--table>(tr*1>th*4)+(tr*1>td*4)   tab--%>
+<%--
+table((thead(tr*1>th*4))+(tbody(tr*1>td*4)))
+--%>
+
 <table>
+    <thead>
     <tr>
         <th>序号</th>
         <th>ID</th>
         <th>姓名</th>
         <th>电话</th>
     </tr>
+    </thead>
+    <tbody>
     <tr ng-repeat="enity in testArr">
         <td>{{$index+1}}</td>
         <td>{{enity.id}}</td>
         <td>{{enity.name}}</td>
         <td>{{enity.telephonenumber}}</td>
     </tr>
+    </tbody>
 </table>
 
 </body>

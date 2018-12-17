@@ -7,6 +7,7 @@
     <groupId>com.pinyougou</groupId>
     <artifactId>pyg_parent_74</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <!--管理子模块-->
     <modules>
         <module>pyg_dubbox_customer</module>
         <module>pyg_dubbox_provider</module>
@@ -22,28 +23,40 @@
 
     <!-- 集中定义依赖版本号 -->
     <properties>
-        <junit.version>4.12</junit.version>
-        <spring.version>4.2.4.RELEASE</spring.version>
-        <pagehelper.version>4.0.0</pagehelper.version>
-        <servlet-api.version>2.5</servlet-api.version>
-        <dubbo.version>2.8.4</dubbo.version>
-        <zookeeper.version>3.4.7</zookeeper.version>
-        <zkclient.version>0.1</zkclient.version>
-        <mybatis.version>3.2.8</mybatis.version>
-        <mybatis.spring.version>1.2.2</mybatis.spring.version>
-        <mybatis.paginator.version>1.2.15</mybatis.paginator.version>
-        <mysql.version>5.1.32</mysql.version>
-        <druid.version>1.0.9</druid.version>
+        <activemq-all.version>5.13.4</activemq-all.version>
+        <cas-client-core.version>3.4.1</cas-client-core.version>
+        <commons-codec.version>1.10</commons-codec.version>
         <commons-fileupload.version>1.3.1</commons-fileupload.version>
+        <druid.version>1.1.10</druid.version>
+        <dom4j.version>1.6.1</dom4j.version>
+        <dubbo.version>2.8.4</dubbo.version>
+        <fastjson.version>1.2.47</fastjson.version>
+        <fastdfs-client-java.version>1.27-SNAPSHOT</fastdfs-client-java.version>
         <freemarker.version>2.3.23</freemarker.version>
-        <activemq.version>5.11.2</activemq.version>
-        <security.version>3.2.3.RELEASE</security.version>
-        <solrj.version>4.10.3</solrj.version>
-        <ik.version>2012_u6</ik.version>
+        <httpclient.version>4.5.3</httpclient.version>
+        <httpcore.version>4.4.4</httpcore.version>
+        <ikanalyzer.version>2012_u6</ikanalyzer.version>
+        <javax.servlet-api.version>3.1.0</javax.servlet-api.version>
+        <junit.version>4.12</junit.version>
+        <jedis.version>2.9.0</jedis.version>
+        <javassist.version>3.24.0-GA</javassist.version>
+        <kaptcha.version>2.3.2</kaptcha.version>
+        <mybatis.version>3.2.8</mybatis.version>
+        <mybatis-spring.version>1.3.2</mybatis-spring.version>
+        <mybatis-paginator.version>1.2.15</mybatis-paginator.version>
+        <mysql.version>6.0.6</mysql.version>
+        <pagehelper.version>4.0.0</pagehelper.version>
+        <solor-solrj.version>4.10.3</solor-solrj.version>
+        <spring.version>4.2.5.RELEASE</spring.version>
+        <spring-security.version>4.1.0.RELEASE</spring-security.version>
+        <spring-data-redis.version>1.7.2.RELEASE</spring-data-redis.version>
+        <xml-apis.version>1.4.01</xml-apis.version>
+        <zkclient.version>0.1</zkclient.version>
+        <zookeeper.version>3.4.13</zookeeper.version>
     </properties>
 
+    <!--依赖管理-->
     <dependencies>
-
         <!-- Spring -->
         <dependency>
             <groupId>org.springframework</groupId>
@@ -85,25 +98,57 @@
             <artifactId>spring-test</artifactId>
             <version>${spring.version}</version>
         </dependency>
-        <!-- dubbo相关 -->
+        <!-- dubbo相关 (分布式)-->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>dubbo</artifactId>
             <version>${dubbo.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>log4j</artifactId>
+                    <groupId>log4j</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>commons-logging</artifactId>
+                    <groupId>commons-logging</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>spring-core</artifactId>
+                    <groupId>org.springframework</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>spring-beans</artifactId>
+                    <groupId>org.springframework</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>netty</artifactId>
+                    <groupId>io.netty</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>spring-expression</artifactId>
+                    <groupId>org.springframework</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.zookeeper</groupId>
             <artifactId>zookeeper</artifactId>
             <version>${zookeeper.version}</version>
-
             <!--排除这个slf4j-log4j12-->
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
                     <artifactId>slf4j-log4j12</artifactId>
                 </exclusion>
+                <exclusion>
+                    <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
             </exclusions>
-
         </dependency>
         <dependency>
             <groupId>com.github.sgroschupf</groupId>
@@ -111,8 +156,12 @@
             <version>${zkclient.version}</version>
             <exclusions>
                 <exclusion>
-                    <groupId>org.apache.zookeeper</groupId>
                     <artifactId>zookeeper</artifactId>
+                    <groupId>org.apache.zookeeper</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>log4j</artifactId>
+                    <groupId>log4j</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -124,24 +173,27 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.28</version>
+            <version>${fastjson.version}</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.javassist/javassist -->
         <dependency>
-            <groupId>javassist</groupId>
+            <groupId>org.javassist</groupId>
             <artifactId>javassist</artifactId>
-            <version>3.11.0.GA</version>
+            <version>${javassist.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>1.10</version>
+            <version>${commons-codec.version}</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
         <dependency>
             <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <version>2.5</version>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${javax.servlet-api.version}</version>
             <scope>provided</scope>
         </dependency>
+        <!--分页-->
         <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper</artifactId>
@@ -156,18 +208,12 @@
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis-spring</artifactId>
-            <version>${mybatis.spring.version}</version>
+            <version>${mybatis-spring.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.miemiedev</groupId>
             <artifactId>mybatis-paginator</artifactId>
-            <version>${mybatis.paginator.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.mybatis</groupId>
-                    <artifactId>mybatis</artifactId>
-                </exclusion>
-            </exclusions>
+            <version>${mybatis-paginator.version}</version>
         </dependency>
         <!-- MySql -->
         <dependency>
@@ -181,35 +227,40 @@
             <artifactId>druid</artifactId>
             <version>${druid.version}</version>
         </dependency>
-        <!--
-                <dependency>
-                    <groupId>org.csource.fastdfs</groupId>
-                    <artifactId>fastdfs</artifactId>
-                    <version>1.2</version>
-                </dependency>
-        -->
         <!--分布式文件系统-->
         <dependency>
             <groupId>org.csource</groupId>
             <artifactId>fastdfs-client-java</artifactId>
-            <version>1.27-SNAPSHOT</version>
+            <version>${fastdfs-client-java.version}</version>
         </dependency>
         <!-- 文件上传组件 -->
         <dependency>
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
             <version>${commons-fileupload.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>commons-io</artifactId>
+                    <groupId>commons-io</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!-- 缓存 -->
         <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
-            <version>2.8.1</version>
+            <version>${jedis.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-redis</artifactId>
-            <version>1.7.2.RELEASE</version>
+            <version>${spring-data-redis.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.freemarker</groupId>
@@ -219,23 +270,34 @@
         <dependency>
             <groupId>org.apache.activemq</groupId>
             <artifactId>activemq-all</artifactId>
-            <version>${activemq.version}</version>
+            <version>${activemq-all.version}</version>
         </dependency>
         <!-- 身份验证 -->
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
-            <version>4.1.0.RELEASE</version>
+            <version>${spring-security.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>spring-context</artifactId>
+                    <groupId>org.springframework</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>spring-beans</artifactId>
+                    <groupId>org.springframework</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-config</artifactId>
-            <version>4.1.0.RELEASE</version>
+            <version>${spring-security.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.penggle</groupId>
             <artifactId>kaptcha</artifactId>
-            <version>2.3.2</version>
+            <version>${kaptcha.version}</version>
+            <!--排除servlet冲突-->
             <exclusions>
                 <exclusion>
                     <groupId>javax.servlet</groupId>
@@ -246,23 +308,31 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-cas</artifactId>
-            <version>4.1.0.RELEASE</version>
+            <version>${spring-security.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.jasig.cas.client</groupId>
                     <artifactId>cas-client-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>spring-web</artifactId>
+                    <groupId>org.springframework</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
         <dependency>
             <groupId>org.jasig.cas.client</groupId>
             <artifactId>cas-client-core</artifactId>
-            <version>3.3.3</version>
+            <version>${cas-client-core.version}</version>
             <!-- 排除log4j包冲突 -->
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
                     <artifactId>log4j-over-slf4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -270,33 +340,54 @@
         <dependency>
             <groupId>org.apache.solr</groupId>
             <artifactId>solr-solrj</artifactId>
-            <version>${solrj.version}</version>
+            <version>${solor-solrj.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>zookeeper</artifactId>
+                    <groupId>org.apache.zookeeper</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.janeluo</groupId>
             <artifactId>ikanalyzer</artifactId>
-            <version>${ik.version}</version>
+            <version>${ikanalyzer.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpcore</artifactId>
-            <version>4.4.4</version>
+            <version>${httpcore.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>4.5.3</version>
+            <version>${httpclient.version}</version>
         </dependency>
         <dependency>
             <groupId>dom4j</groupId>
             <artifactId>dom4j</artifactId>
-            <version>1.6.1</version>
+            <version>${dom4j.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>xml-apis</artifactId>
+                    <groupId>xml-apis</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>xml-apis</groupId>
             <artifactId>xml-apis</artifactId>
-            <version>1.4.01</version>
+            <version>${xml-apis.version}</version>
         </dependency>
+
     </dependencies>
 
     <build>
