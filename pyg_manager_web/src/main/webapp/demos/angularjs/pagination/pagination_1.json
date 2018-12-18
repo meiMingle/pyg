@@ -1,0 +1,20 @@
+{
+  "total": 100,
+  "rows": [
+    {
+      "id": 1,
+      "name": "Test1",
+      "firstChar": "1"
+    },
+    {
+      "id": 2,
+      "name": "Test2",
+      "firstChar": "1"
+    },
+    {
+      "id": 3,
+      "name": "Test3",
+      "firstChar": "1"
+    }
+  ]
+}

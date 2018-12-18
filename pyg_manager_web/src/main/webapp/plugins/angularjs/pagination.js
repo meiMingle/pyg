@@ -141,7 +141,7 @@ angular.module('pagination', []).directive('tmPagination', [function () {
                 }
 
                 if (scope.conf.onChange) {
-
+                    
 
                     // 防止初始化两次请求问题
                     if (!(oldValue != newValue && oldValue[0] == 0)) {
@@ -183,8 +183,8 @@ angular.module('pagination', []).directive('tmPagination', [function () {
 
 
                 var newValue = scope.conf.totalItems + ' ' + scope.conf.currentPage + ' ' + scope.conf.itemsPerPage;
-
-
+                
+                
                 return newValue;
 
 

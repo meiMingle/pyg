@@ -76,7 +76,7 @@ var uploadPreview = function (setting) {
                 }
                 _self.Setting.callback();
             }
-
+	
         }
     };
 
@@ -91,5 +91,4 @@ function file_click() {
         new uploadPreview({UpBtn: "up_img_WU_FILE_" + i, ImgShow: "imgShow_WU_FILE_" + i});
     }
 }
-
 window.onload = file_click;

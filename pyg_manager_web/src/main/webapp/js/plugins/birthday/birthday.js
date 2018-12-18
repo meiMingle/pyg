@@ -82,7 +82,6 @@
                     }
                 }
             }
-
             $MonthSelector.change(function () {
                 BuildDay();
             });

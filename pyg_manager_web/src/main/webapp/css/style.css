@@ -10,11 +10,9 @@
     color: #fff;
 
 }
-
 .data span.arrowup {
     color: #d88918;
 }
-
 .data span.arrowdown {
     color: #6bb10a;
 }
@@ -22,7 +20,6 @@
 .item-blue .glyphicon {
     background-color: #39a9ea;
 }
-
 .item-green {
     line-height: 58px;
 }
@@ -39,7 +36,6 @@
 .item-red .glyphicon {
     background-color: #f14f4f;
 }
-
 .chart .chart-box {
     margin: 10px;
 }
@@ -51,7 +47,6 @@
     border: 1px solid #d4d4d4;
     border-radius: 2px;
 }
-
 .data-type .title,
 .data-type .data {
     padding: 3px 12px;
@@ -59,7 +54,6 @@
     overflow: hidden;
     height: 42px;
 }
-
 .data-type .title {
     line-height: 34px;
     border-right: 1px solid #d4d4d4;
@@ -85,15 +79,12 @@
 .data-type .data > label {
     line-height: 36px;
 }
-
 .data-type .data > .form-group {
     line-height: 36px;
 }
-
 .data-type .data.text {
     line-height: 36px;
 }
-
 /* label行分隔符 */
 .data-type .data.border-right {
     border-right: 1px solid #d4d4d4;
@@ -104,11 +95,9 @@
 .data-type .data.rowHeight2x {
     height: 84px;
 }
-
 .data-type .title.rowHeight2x {
     line-height: 78px;
 }
-
 /*.data-type .data.rowHeight2x > label {
 	line-height:78px;
 }*/
@@ -116,7 +105,6 @@
 .data-type .data.editer {
     height: 320px;
 }
-
 .data-type .title.editer {
     line-height: 300px;
 }
@@ -154,7 +142,6 @@
     filter: alpha(opacity=0);
     cursor: pointer
 }
-
 .a-upload:hover {
     color: #444;
     background: #eee;
