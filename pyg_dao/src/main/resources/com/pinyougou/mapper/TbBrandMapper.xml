@@ -4,4 +4,13 @@
     <select id="findAll" resultType="tbBrand">
         select id, name, first_char firstChar from tb_brand
     </select>
+    <insert id="save" parameterType="tbBrand">
+        insert into tb_brand (id,name,first_char) values (#{id},#{name},#{firstChar})
+    </insert>
+    <select id="findOne" parameterType="Long" resultType="tbBrand">
+        select id, name, first_char firstChar from tb_brand where id = #{id}
+    </select>
+    <update id="update" parameterType="tbBrand">
+        update tb_brand set name = #{name}, first_char = #{firstChar} where id = #{id}
+    </update>
 </mapper>
