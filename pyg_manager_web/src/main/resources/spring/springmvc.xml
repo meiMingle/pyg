@@ -27,7 +27,7 @@
     <!-- 消费方应用名，用于计算依赖关系，不是匹配条件，不要与提供方一样 -->
     <dubbo:application name="pinyougou-manager-web"/>
     <!-- 使用zookeeper广播注册中心 暴露服务地址 -->
-    <dubbo:registry protocol="zookeeper" address="zookeeper://192.168.25.133:2181" check="false"/>
+    <dubbo:registry protocol="zookeeper" address="zookeeper://192.168.25.136:2181" check="false"/>
     <!--开启dubbo注解支持，扫描@Refrence-->
     <dubbo:annotation package="com.pinyougou.manager.controller"/>
 

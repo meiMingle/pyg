@@ -33,5 +33,12 @@ public class TbBrand implements Serializable {
         this.firstChar = firstChar;
     }
 
-
+    @Override
+    public String toString() {
+        return "TbBrand{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", firstChar='" + firstChar + '\'' +
+                '}';
+    }
 }

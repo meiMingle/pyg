@@ -10,9 +10,9 @@ import java.util.List;
  * @ Version   -  -  -    : 1.0
  **/
 public class PageResult<T> implements Serializable {
-    Long total;
+    private Long total;
 
-    List<T> rows;
+    private List<T> rows;
 
 
     public PageResult(Long total, List<T> rows) {

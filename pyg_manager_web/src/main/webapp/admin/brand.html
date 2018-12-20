@@ -10,64 +10,15 @@
     <link href="../plugins/adminLTE/css/skins/_all-skins.min.css" rel="stylesheet">
     <link href="../css/style.css" rel="stylesheet">
 	<script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
-	<!--<script src="../plugins/bootstrap/js/bootstrap.min.js"></script>-->
+	<script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
 	<link href="../plugins/angularjs/pagination.css" rel="stylesheet">
 	<script src="../plugins/angularjs/angular.min.js"></script>
 	<script src="../plugins/angularjs/pagination.js"></script>
-	<script>
-		var app = angular.module('pyg', ['pagination']);
-		app.controller('brandController', function ($scope, $http) {
-			$scope.findAll = function () {
-				$http.get('../brand/findAll').success(function (res) {
-					$scope.list = res;
-				});
-			};
-			// 分页控件配置
-			// currentPage：当前页；totalItems：总记录数；itemsPerPage：每页记录数；perPageOptions：分页选项；onChange：当页码变更后自动触发的方法
-			$scope.paginationConf = {
-				currentPage: 1,
-				totalItems: 10,
-				itemsPerPage: 5,
-				perPageOptions: [10, 20, 30, 40, 50],
-				onChange: function () {
-					$scope.reloadList();//重新加载
-				}
-			};
-
-			//重新加载列表 数据
-			$scope.reloadList = function () {
-				//切换页码
-				$scope.findPage($scope.paginationConf.currentPage, $scope.paginationConf.itemsPerPage);
-			};
-
-			$scope.findPage = function (page, size) {
-				$http.get('../brand/findPage/' + page + "/" + size).success(
-						function (response) {
-							$scope.list = response.rows;
-							$scope.paginationConf.totalItems = response.total;//更新总记录数
-						}
-				);
-			};
-
-			$scope.entity = {};
-			//保存数据的方法
-			$scope.save = function () {
-				$http.post('../brand/save', $scope.entity).success(function (res) {
-					if (res.success) {
-						$scope.reloadList();
-					} else {
-						alert(res.message);
-					}
-				});
-			};
-			//根据id查询某个品牌
-			$scope.findOne = function (id) {
-				$http.get('../brand/findOne/' + id).success(function (res) {
-					$scope.entity = res;
-				});
-			}
-		});
-	</script>
+	<!---->
+	<script src="../js/base_pagination.js"></script>
+	<script src="../js/service/brandService.js"></script>
+	<script src="../js/controller/branController.js"></script>
+	<script></script>
 </head>
 <body class="hold-transition skin-red sidebar-mini" ng-app="pyg" ng-controller="brandController">
 <!-- .box-body -->
@@ -87,7 +38,9 @@
 					<button class="btn btn-default" data-target="#editModal" data-toggle="modal" ng-click="entity={}"
 							title="新建" type="button"><i class="fa fa-file-o"></i> 新建
 					</button>
-					<button class="btn btn-default" title="删除" type="button"><i class="fa fa-trash-o"></i> 删除</button>
+					<button class="btn btn-default" ng-click="delete()" title="删除" type="button"><i
+							class="fa fa-trash-o"></i> 删除
+					</button>
 					<button class="btn btn-default" onclick="window.location.reload();" title="刷新" type="button"><i
 							class="fa fa-refresh"></i> 刷新
 					</button>
@@ -102,7 +55,8 @@
 		<!--工具栏/-->
 
 		<!--数据列表-->
-		<table class="table table-bordered table-striped table-hover dataTable" id="dataList">
+		<table class="table table-bordered table-striped table-hover dataTable" id="dataList"
+			   ng-click="selectAllOptions($event)">
 			<thead>
 			<tr>
 				<th class="" style="padding-right:0px">
@@ -116,7 +70,7 @@
 			</thead>
 			<tbody>
 			<tr ng-repeat="brand in list">
-				<td><input type="checkbox"></td>
+				<td><input ng-click="selectOptions($event,brand.id)" type="checkbox"></td>
 				<td>{{brand.id}}</td>
 				<td>{{brand.name}}</td>
 				<td>{{brand.firstChar}}</td>
