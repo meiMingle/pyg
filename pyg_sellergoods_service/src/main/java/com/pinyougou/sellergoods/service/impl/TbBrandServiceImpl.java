@@ -27,7 +27,7 @@ public class TbBrandServiceImpl implements TbBrandService {
      * @ Return    -  -  -    :  java.util.List<com.pinyougou.pojo.TbBrand>
      **/
     public List<TbBrand> findAll() {
-        return tbBrandMapper.findAll();
+        return tbBrandMapper.selectByExample(null);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class TbBrandServiceImpl implements TbBrandService {
 
     public PageResult<TbBrand> findPage(Integer page, Integer size) {
         PageHelper.startPage(page, size);
-        Page<TbBrand> tbBrandPage = (Page<TbBrand>) tbBrandMapper.findAll();
+        Page<TbBrand> tbBrandPage = (Page<TbBrand>) tbBrandMapper.selectByExample(null);
         return new PageResult<>(tbBrandPage.getTotal(), tbBrandPage.getResult());
     }
 
@@ -54,10 +54,10 @@ public class TbBrandServiceImpl implements TbBrandService {
      * @Return    -  -  -    :  void
      **/
     public void save(TbBrand tbBrand) {
-        if (null == tbBrandMapper.findOne(tbBrand.getId())) {
-            tbBrandMapper.save(tbBrand);
+        if (null == tbBrand.getId()) {
+            tbBrandMapper.insert(tbBrand);
         } else {
-            tbBrandMapper.update(tbBrand);
+            tbBrandMapper.updateByPrimaryKey(tbBrand);
         }
     }
 
@@ -70,7 +70,7 @@ public class TbBrandServiceImpl implements TbBrandService {
      * @Return    -  -  -    :  com.pinyougou.pojo.TbBrand
      **/
     public TbBrand findOne(Long id) {
-        return tbBrandMapper.findOne(id);
+        return tbBrandMapper.selectByPrimaryKey(id);
 
     }
 
@@ -84,7 +84,7 @@ public class TbBrandServiceImpl implements TbBrandService {
     @Override
     public void delete(Long[] ids) {
         for (Long id : ids) {
-            tbBrandMapper.delete(id);
+            tbBrandMapper.deleteByPrimaryKey(id);
         }
     }
 }

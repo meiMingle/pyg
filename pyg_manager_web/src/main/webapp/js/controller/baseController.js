@@ -39,5 +39,4 @@ app.controller('baseController', function ($scope) {
                 };
                 todo : 品牌管理 删除的全选全不选
     */
-
 });
