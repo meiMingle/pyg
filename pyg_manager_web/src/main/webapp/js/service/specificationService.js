@@ -19,5 +19,4 @@ app.service('specificationService', function ($http) {
         return $http.get("../specification/delete/" + selectIds)
     }
 
-
 });

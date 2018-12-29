@@ -60,11 +60,11 @@ public class BrandController {
         try {
             tbBrandService.save(tbBrand);
             //保存成功，返回成功信息
-            return new Result(true, "save success");
+            return new Result(true, "保存/修改成功");
         } catch (Exception e) {
             //保存失败，返回错误信息
             e.printStackTrace();
-            return new Result(true, "save failure");
+            return new Result(false, "保存/修改失败");
         }
     }
 

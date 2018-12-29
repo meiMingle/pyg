@@ -94,4 +94,5 @@ public interface TbTypeTemplateMapper {
      * @mbg.generated Fri Dec 21 14:34:18 CST 2018
      */
     int updateByPrimaryKey(TbTypeTemplate record);
+
 }

@@ -62,4 +62,8 @@ public class TbSpecification implements Serializable {
     public void setSpecName(String specName) {
         this.specName = specName == null ? null : specName.trim();
     }
+
+    public String getText() {
+        return this.specName;
+    }
 }

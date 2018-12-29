@@ -99,4 +99,9 @@ public class TbBrand implements Serializable {
     public void setFirstChar(String firstChar) {
         this.firstChar = firstChar == null ? null : firstChar.trim();
     }
+
+    public String getText() {
+        return this.name;
+    }
+
 }
