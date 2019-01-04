@@ -46,7 +46,7 @@ public interface SellerService {
      * @param id
      * @return
      */
-    TbSeller findOne(Long id);
+    TbSeller findOne(String id);
 
 
     /**
@@ -54,7 +54,7 @@ public interface SellerService {
      *
      * @param ids
      */
-    void delete(Long[] ids);
+    void delete(String[] ids);
 
     /**
      * 分页
@@ -65,4 +65,5 @@ public interface SellerService {
      */
     PageResult findPage(TbSeller seller, int pageNum, int pageSize);
 
+    void auditSeller(String sellerId, String status);
 }

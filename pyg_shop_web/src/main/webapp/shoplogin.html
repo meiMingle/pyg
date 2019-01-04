@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="IE=9; IE=8; IE=7; IE=EDGE" http-equiv="X-UA-Compatible">
+    <meta content="IE=EmulateIE7" http-equiv="X-UA-Compatible"/>
+    <title>品优购，欢迎登录</title>
+    <link href="assets/img/favicon.ico" rel="icon">
+
+    <link href="css/webbase.css" rel="stylesheet" type="text/css"/>
+    <link href="css/pages-shoplogin.css" rel="stylesheet" type="text/css"/>
+</head>
+
+<body>
+<div class="login-box">
+    <!--head-->
+    <div class="py-container logoArea">
+        <a class="logo" href=""></a>
+    </div>
+    <!--loginArea-->
+    <div class="loginArea">
+        <div class="login ">
+            <div class="py-container">
+                <div class="loginform">
+                    <ul class="sui-nav nav-tabs tab-wraped">
+                        <li>
+                            <a data-toggle="tab" href="#index">
+                                <h3>扫描登录</h3>
+                            </a>
+                        </li>
+                        <li class="active">
+                            <a data-toggle="tab" href="#profile">
+                                <h3>账户登录</h3>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content tab-wraped">
+                        <div class="tab-pane" id="index">
+                            <p>二维码登录，暂为官网二维码</p>
+                            <img src="img/wx_cz.jpg"/>
+                        </div>
+                        <div class="tab-pane  active" id="profile">
+                            <form action="/login" class="sui-form" id="loginForm" method="post">
+                                <div class="input-prepend"><span class="add-on loginname"></span>
+                                    <input class="span2 input-xfat" id="prependedInput" name="username"
+                                           placeholder="邮箱/用户名/手机号" type="text">
+                                </div>
+                                <div class="input-prepend"><span class="add-on loginpwd"></span>
+                                    <input class="span2 input-xfat" id="prependedInput" name="password"
+                                           placeholder="请输入密码" type="password">
+                                </div>
+                                <div class="setting">
+                                    <label class="checkbox inline"><input checked="" name="m1" type="checkbox"
+                                                                          value="2">自动登录</label>
+                                    <span class="forget">忘记密码？</span>
+                                </div>
+                                <div class="logined">
+                                    <a class="sui-btn btn-block btn-xlarge btn-danger"
+                                       href="javascript:document.getElementById('loginForm').submit()" target="_self">登&nbsp;&nbsp;录</a>
+                                </div>
+                            </form>
+                            <div class="otherlogin">
+                                <div class="types">
+                                    <ul>
+                                        <li><img height="35px" src="img/qq.png" width="35px"/></li>
+                                        <li><img src="img/sina.png"/></li>
+                                        <li><img src="img/ali.png"/></li>
+                                        <li><img src="img/weixin.png"/></li>
+                                    </ul>
+                                </div>
+                                <span class="register"><a href="register.html" target="_blank">立即注册</a></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!--foot-->
+    <div class="py-container copyright">
+        <ul>
+            <li>关于我们</li>
+            <li>联系我们</li>
+            <li>联系客服</li>
+            <li>商家入驻</li>
+            <li>营销中心</li>
+            <li>手机品优购</li>
+            <li>销售联盟</li>
+            <li>品优购社区</li>
+        </ul>
+        <div class="address">地址：北京市昌平区建材城西路金燕龙办公楼一层 邮编：100096 电话：400-618-4000 传真：010-82935100</div>
+        <div class="beian">京ICP备08001421号京公网安备110108007702
+        </div>
+    </div>
+</div>
+
+<script src="js/plugins/jquery/jquery.min.js" type="text/javascript"></script>
+<script src="js/plugins/jquery.easing/jquery.easing.min.js" type="text/javascript"></script>
+<script src="js/plugins/sui/sui.min.js" type="text/javascript"></script>
+<script src="js/plugins/jquery-placeholder/jquery.placeholder.min.js" type="text/javascript"></script>
+<script src="js/pages/shoplogin.js" type="text/javascript"></script>
+</body>
+
+</html>

@@ -32,7 +32,6 @@ public class TypeTemplateController {
     @RequestMapping("/findAll")
     public List<TbTypeTemplate> findAll() {
         List<TbTypeTemplate> list = typeTemplateService.findAll();
-        System.out.println(list);
         return list;
     }
 

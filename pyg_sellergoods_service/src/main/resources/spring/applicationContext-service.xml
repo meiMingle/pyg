@@ -15,7 +15,7 @@
     <!-- 服务系统在dubbo中的名称，服务系统之间不能重复 -->
     <dubbo:application name="pinyougou-sellergoods-service"/>
     <!-- 注册中心地址 -->
-    <dubbo:registry address="zookeeper://192.168.25.136:2181"/>
+    <dubbo:registry address="zookeeper://192.168.25.138:2181"/>
     <!-- 扫描service注解，将该注解所在类发布成服务 -->
     <dubbo:annotation package="com.pinyougou.sellergoods.service.impl"/>
     <!-- 服务系统访问注册中心的超时时间 -->

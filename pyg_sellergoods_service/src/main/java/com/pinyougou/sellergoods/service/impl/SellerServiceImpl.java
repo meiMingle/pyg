@@ -1,5 +1,4 @@
 package com.pinyougou.sellergoods.service.impl;
-
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -16,8 +15,8 @@ import java.util.List;
 
 /**
  * 服务实现层
- *
  * @author Administrator
+ *
  */
 @Service
 @Transactional
@@ -40,7 +39,11 @@ public class SellerServiceImpl implements SellerService {
     @Override
     public PageResult findPage(int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        Page<TbSeller> page = (Page<TbSeller>) sellerMapper.selectByExample(null);
+
+        TbSellerExample tbSellerExample = new TbSellerExample();
+        Criteria criteria = tbSellerExample.createCriteria();
+        criteria.andStatusEqualTo("0");
+        Page<TbSeller> page = (Page<TbSeller>) sellerMapper.selectByExample(tbSellerExample);
         return new PageResult(page.getTotal(), page.getResult());
     }
 
@@ -49,6 +52,7 @@ public class SellerServiceImpl implements SellerService {
      */
     @Override
     public void add(TbSeller seller) {
+        seller.setStatus("0");
         sellerMapper.insert(seller);
     }
 
@@ -68,7 +72,7 @@ public class SellerServiceImpl implements SellerService {
      * @return
      */
     @Override
-    public TbSeller findOne(Long id) {
+    public TbSeller findOne(String id) {
         return sellerMapper.selectByPrimaryKey(id);
     }
 
@@ -76,8 +80,8 @@ public class SellerServiceImpl implements SellerService {
      * 批量删除
      */
     @Override
-    public void delete(Long[] ids) {
-        for (Long id : ids) {
+    public void delete(String[] ids) {
+        for (String id : ids) {
             sellerMapper.deleteByPrimaryKey(id);
         }
     }
@@ -139,6 +143,9 @@ public class SellerServiceImpl implements SellerService {
             if (seller.getOrgNumber() != null && seller.getOrgNumber().length() > 0) {
                 criteria.andOrgNumberLike("%" + seller.getOrgNumber() + "%");
             }
+            if (seller.getAddress() != null && seller.getAddress().length() > 0) {
+                criteria.andAddressLike("%" + seller.getAddress() + "%");
+            }
             if (seller.getLogoPic() != null && seller.getLogoPic().length() > 0) {
                 criteria.andLogoPicLike("%" + seller.getLogoPic() + "%");
             }
@@ -157,11 +164,21 @@ public class SellerServiceImpl implements SellerService {
             if (seller.getBankName() != null && seller.getBankName().length() > 0) {
                 criteria.andBankNameLike("%" + seller.getBankName() + "%");
             }
+            if (seller.getBankAccount() != null && seller.getBankAccount().length() > 0) {
+                criteria.andBankAccountLike("%" + seller.getBankAccount() + "%");
+            }
 
         }
 
         Page<TbSeller> page = (Page<TbSeller>) sellerMapper.selectByExample(example);
         return new PageResult(page.getTotal(), page.getResult());
+    }
+
+    @Override
+    public void auditSeller(String sellerId, String status) {
+        TbSeller tbSeller = sellerMapper.selectByPrimaryKey(sellerId);
+        tbSeller.setStatus(status);
+        sellerMapper.updateByPrimaryKey(tbSeller);
     }
 
 }

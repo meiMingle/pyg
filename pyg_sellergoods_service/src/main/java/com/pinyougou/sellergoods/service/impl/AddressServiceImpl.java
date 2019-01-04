@@ -16,8 +16,8 @@ import java.util.List;
 
 /**
  * 服务实现层
- *
  * @author Administrator
+ *
  */
 @Service
 @Transactional
@@ -127,5 +127,5 @@ public class AddressServiceImpl implements AddressService {
         Page<TbAddress> page = (Page<TbAddress>) addressMapper.selectByExample(example);
         return new PageResult(page.getTotal(), page.getResult());
     }
-
+	
 }
