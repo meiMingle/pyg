@@ -15,32 +15,16 @@ import java.util.List;
 public class Goods implements Serializable {
 
     List<TbItem> itemList;
-    private TbGoods tbGoods;
-    private TbGoodsDesc tbGoodsDesc;
+    private TbGoods Goods;
+    private TbGoodsDesc GoodsDesc;
 
     public Goods() {
     }
 
-    public Goods(TbGoods tbGoods, TbGoodsDesc tbGoodsDesc, List<TbItem> itemList) {
-        this.tbGoods = tbGoods;
-        this.tbGoodsDesc = tbGoodsDesc;
+    public Goods(List<TbItem> itemList, TbGoods goods, TbGoodsDesc goodsDesc) {
         this.itemList = itemList;
-    }
-
-    public TbGoods getTbGoods() {
-        return tbGoods;
-    }
-
-    public void setTbGoods(TbGoods tbGoods) {
-        this.tbGoods = tbGoods;
-    }
-
-    public TbGoodsDesc getTbGoodsDesc() {
-        return tbGoodsDesc;
-    }
-
-    public void setTbGoodsDesc(TbGoodsDesc tbGoodsDesc) {
-        this.tbGoodsDesc = tbGoodsDesc;
+        Goods = goods;
+        GoodsDesc = goodsDesc;
     }
 
     public List<TbItem> getItemList() {
@@ -49,5 +33,21 @@ public class Goods implements Serializable {
 
     public void setItemList(List<TbItem> itemList) {
         this.itemList = itemList;
+    }
+
+    public TbGoods getGoods() {
+        return Goods;
+    }
+
+    public void setGoods(TbGoods goods) {
+        Goods = goods;
+    }
+
+    public TbGoodsDesc getGoodsDesc() {
+        return GoodsDesc;
+    }
+
+    public void setGoodsDesc(TbGoodsDesc goodsDesc) {
+        GoodsDesc = goodsDesc;
     }
 }

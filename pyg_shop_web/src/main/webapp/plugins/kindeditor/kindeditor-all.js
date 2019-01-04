@@ -1,16 +1,18 @@
 /*******************************************************************************
  * KindEditor - WYSIWYG HTML Editor for Internet
- * Copyright (C) 2006-2013 kindsoft.net
+ * Copyright (C) 2006-2016 kindsoft.net
  *
  * @author Roddy <luolonghao@gmail.com>
  * @website http://www.kindsoft.net/
  * @licence http://www.kindsoft.net/license.php
- * @version 4.1.10 (2013-11-23)
+ * @version 4.1.11 (2016-03-31)
  *******************************************************************************/
 (function (window, undefined) {
     if (window.KindEditor) {
         return;
     }
+
+
     if (!window.console) {
         window.console = {};
     }
@@ -18,7 +20,7 @@
         console.log = function () {
         };
     }
-    var _VERSION = '4.1.10 (2013-11-23)',
+    var _VERSION = '4.1.11 (2016-03-31)',
         _ua = navigator.userAgent.toLowerCase(),
         _IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
         _NEWIE = _ua.indexOf('msie') == -1 && _ua.indexOf('trident') > -1,
@@ -85,7 +87,7 @@
 
     function _addUnit(val, unit) {
         unit = unit || 'px';
-        return val && /^\d+$/.test(val) ? val + unit : val;
+        return val && /^-?\d+(?:\.\d+)?$/.test(val) ? val + unit : val;
     }
 
     function _removeUnit(val) {
@@ -176,6 +178,7 @@
         child.parent = parent ? parent.prototype : null;
     }
 
+
     function _json(text) {
         var match;
         if ((match = /\{[\s\S]*\}|\[[\s\S]*\]/.exec(text))) {
@@ -235,6 +238,7 @@
         _FILL_ATTR_MAP = _toMap('checked,compact,declare,defer,disabled,ismap,multiple,nohref,noresize,noshade,nowrap,readonly,selected'),
         _VALUE_TAG_MAP = _toMap('input,button,textarea,select');
 
+
     function _getBasePath() {
         var els = document.getElementsByTagName('script'), src;
         for (var i = 0, len = els.length; i < len; i++) {
@@ -259,7 +263,7 @@
         langPath: K.basePath + 'lang/',
         pluginsPath: K.basePath + 'plugins/',
         themeType: 'default',
-        langType: 'zh_CN',
+        langType: 'zh-CN',
         urlType: '',
         newlineTag: 'p',
         resizeType: 2,
@@ -317,7 +321,7 @@
                 '.font-style', '.text-decoration', '.vertical-align', '.background', '.border'
             ],
             a: ['id', 'class', 'href', 'target', 'name'],
-            embed: ['id', 'class', 'src', 'width', 'height', 'type', 'loop', 'autostart', 'quality', '.width', '.height', 'align', 'allowscriptaccess'],
+            embed: ['id', 'class', 'src', 'width', 'height', 'type', 'loop', 'autostart', 'quality', '.width', '.height', 'align', 'allowscriptaccess', 'wmode'],
             img: ['id', 'class', 'src', 'width', 'height', 'border', 'alt', 'title', 'align', '.width', '.height', '.border'],
             'p,ol,ul,li,blockquote,h1,h2,h3,h4,h5,h6': [
                 'id', 'class', 'align', '.text-align', '.color', '.background-color', '.font-size', '.font-family', '.background',
@@ -330,9 +334,15 @@
         },
         layout: '<div class="container"><div class="toolbar"></div><div class="edit"></div><div class="statusbar"></div></div>'
     };
+
+
     var _useCapture = false;
+
+
     var _INPUT_KEY_MAP = _toMap('8,9,13,32,46,48..57,59,61,65..90,106,109..111,188,190..192,219..222');
+
     var _CURSORMOVE_KEY_MAP = _toMap('33..40');
+
     var _CHANGE_KEY_MAP = {};
     _each(_INPUT_KEY_MAP, function (key, val) {
         _CHANGE_KEY_MAP[key] = val;
@@ -340,6 +350,7 @@
     _each(_CURSORMOVE_KEY_MAP, function (key, val) {
         _CHANGE_KEY_MAP[key] = val;
     });
+
 
     function _bindEvent(el, type, fn) {
         if (el.addEventListener) {
@@ -360,6 +371,7 @@
     var _EVENT_PROPS = ('altKey,attrChange,attrName,bubbles,button,cancelable,charCode,clientX,clientY,ctrlKey,currentTarget,' +
         'data,detail,eventPhase,fromElement,handler,keyCode,metaKey,newValue,offsetX,offsetY,originalTarget,pageX,' +
         'pageY,prevValue,relatedNode,relatedTarget,screenX,screenY,shiftKey,srcElement,target,toElement,view,wheelDelta,which').split(',');
+
 
     function KEvent(el, event) {
         this.init(el, event);
@@ -634,7 +646,7 @@
         _bind(window, 'load', readyFunc);
     }
 
-    if (_IE) {
+    if (window.attachEvent) {
         window.attachEvent('onunload', function () {
             _each(_eventData, function (key, events) {
                 if (events.el) {
@@ -783,6 +795,8 @@
         html = html.replace(/\u200B/g, '');
         html = html.replace(/\u00A9/g, '&copy;');
         html = html.replace(/\u00AE/g, '&reg;');
+        html = html.replace(/\u2003/g, '&emsp;');
+        html = html.replace(/\u3000/g, '&emsp;');
         html = html.replace(/<[^>]+/g, function ($0) {
             return $0.replace(/\s+/g, ' ');
         });
@@ -1013,6 +1027,7 @@
         return html;
     }
 
+
     function _tmpl(str, data) {
         var fn = new Function("obj",
             "var p=[],print=function(){p.push.apply(p,arguments);};" +
@@ -1037,6 +1052,7 @@
     K.mediaImg = _mediaImg;
     K.clearMsWord = _clearMsWord;
     K.tmpl = _tmpl;
+
 
     function _contains(nodeA, nodeB) {
         if (nodeA.nodeType == 9 && nodeB.nodeType != 9) {
@@ -1271,6 +1287,7 @@
     K.query = _query;
     K.queryAll = _queryAll;
 
+
     function _get(val) {
         return K(val)[0];
     }
@@ -1375,6 +1392,7 @@
         }
         return {x: x, y: y};
     }
+
 
     function KNode(node) {
         this.init(node);
@@ -1887,6 +1905,8 @@
     });
     K.NodeClass = KNode;
     window.KindEditor = K;
+
+
     var _START_TO_START = 0,
         _START_TO_END = 1,
         _END_TO_END = 2,
@@ -2197,6 +2217,7 @@
         range.setEnd(rng.endContainer, rng.endOffset);
         return range;
     }
+
 
     function KRange(doc) {
         this.init(doc);
@@ -2626,6 +2647,7 @@
     K.END_TO_END = _END_TO_END;
     K.END_TO_START = _END_TO_START;
 
+
     function _nativeCommand(doc, key, val) {
         try {
             doc.execCommand(key, false, val);
@@ -2765,6 +2787,7 @@
         }
         return knode.html().replace(/<[^>]+>/g, '') === '';
     }
+
 
     function _mergeWrapper(a, b) {
         a = a.clone(true);
@@ -3464,6 +3487,7 @@
     K.CmdClass = KCmd;
     K.cmd = _cmd;
 
+
     function _drag(options) {
         var moveEl = options.moveEl,
             moveFn = options.moveFn,
@@ -3491,6 +3515,9 @@
             });
         }
         clickEl.mousedown(function (e) {
+            if (e.button !== 0 && e.button !== 1) {
+                return;
+            }
             e.stopPropagation();
             var self = clickEl.get(),
                 x = _removeUnit(moveEl.css('left')),
@@ -3533,6 +3560,7 @@
             }
         });
     }
+
 
     function KWidget(options) {
         this.init(options);
@@ -3686,6 +3714,7 @@
     K.WidgetClass = KWidget;
     K.widget = _widget;
 
+
     function _iframeDoc(iframe) {
         iframe = _get(iframe);
         return iframe.contentDocument || iframe.contentWindow.document;
@@ -3778,6 +3807,7 @@
         }
         return knode.html(val);
     }
+
 
     function KEdit(options) {
         this.init(options);
@@ -3921,7 +3951,6 @@
             }
             _elementVal(self.srcElement, self.html());
             self.srcElement.show();
-            doc.write('');
             self.iframe.unbind();
             self.textarea.unbind();
             KEdit.parent.remove.call(self);
@@ -3968,9 +3997,15 @@
                 if (!self.designMode) {
                     val = self.html();
                     self.designMode = true;
-                    self.html(val);
                     self.textarea.hide();
-                    self.iframe.show();
+                    self.html(val);
+                    var iframe = self.iframe;
+                    var height = _removeUnit(self.height);
+                    iframe.height(height - 2);
+                    iframe.show();
+                    setTimeout(function () {
+                        iframe.height(height);
+                    }, 0);
                 }
             } else {
                 if (self.designMode) {
@@ -4030,6 +4065,7 @@
     K.edit = _edit;
     K.iframeDoc = _iframeDoc;
 
+
     function _selectToolbar(name, fn) {
         var self = this,
             knode = self.get(name);
@@ -4040,6 +4076,7 @@
             fn(knode);
         }
     }
+
 
     function KToolbar(options) {
         this.init(options);
@@ -4166,6 +4203,7 @@
     K.ToolbarClass = KToolbar;
     K.toolbar = _toolbar;
 
+
     function KMenu(options) {
         this.init(options);
     }
@@ -4251,6 +4289,7 @@
     K.MenuClass = KMenu;
     K.menu = _menu;
 
+
     function KColorPicker(options) {
         this.init(options);
     }
@@ -4329,6 +4368,7 @@
 
     K.ColorPickerClass = KColorPicker;
     K.colorpicker = _colorpicker;
+
 
     function KUploadButton(options) {
         this.init(options);
@@ -4425,6 +4465,7 @@
     K.UploadButtonClass = KUploadButton;
     K.uploadbutton = _uploadbutton;
 
+
     function _createButton(arg) {
         arg = arg || {};
         var name = arg.name || '',
@@ -4436,6 +4477,7 @@
         span.append(btn);
         return span;
     }
+
 
     function KDialog(options) {
         this.init(options);
@@ -4565,6 +4607,7 @@
     K.DialogClass = KDialog;
     K.dialog = _dialog;
 
+
     function _tabs(options) {
         var self = _widget(options),
             remove = self.remove,
@@ -4621,6 +4664,7 @@
 
     K.tabs = _tabs;
 
+
     function _loadScript(url, fn) {
         var head = document.getElementsByTagName('head')[0] || (_QUIRKS ? document.body : document.documentElement),
             script = document.createElement('script');
@@ -4637,6 +4681,7 @@
             }
         };
     }
+
 
     function _chopQuery(url) {
         var index = url.indexOf('?');
@@ -4692,6 +4737,8 @@
     K.loadScript = _loadScript;
     K.loadStyle = _loadStyle;
     K.ajax = _ajax;
+
+
     var _plugins = {};
 
     function _plugin(name, fn) {
@@ -4739,6 +4786,7 @@
             _language[langType][obj.ns][obj.key] = val;
         });
     }
+
 
     function _getImageFromRange(range, fn) {
         if (range.collapsed) {
@@ -4960,6 +5008,7 @@
         }
     }
 
+
     function _undoToRedo(fromStack, toStack) {
         var self = this, edit = self.edit,
             body = edit.doc.body,
@@ -5045,6 +5094,10 @@
         },
         loadPlugin: function (name, fn) {
             var self = this;
+            var _pluginStatus = this._pluginStatus;
+            if (!_pluginStatus) {
+                _pluginStatus = this._pluginStatus = {};
+            }
             if (_plugins[name]) {
                 if (!_isFunction(_plugins[name])) {
                     setTimeout(function () {
@@ -5052,7 +5105,10 @@
                     }, 100);
                     return self;
                 }
-                _plugins[name].call(self, KindEditor);
+                if (!_pluginStatus[name]) {
+                    _plugins[name].call(self, KindEditor);
+                    _pluginStatus[name] = 'inited';
+                }
                 if (fn) {
                     fn.call(self);
                 }
@@ -5656,6 +5712,10 @@
             _each(_plugins, function (name, fn) {
                 if (_isFunction(fn)) {
                     fn.call(editor, KindEditor);
+                    if (!editor._pluginStatus) {
+                        editor._pluginStatus = {};
+                    }
+                    editor._pluginStatus[name] = 'inited';
                 }
             });
             return editor.create();
@@ -5720,6 +5780,8 @@
             this.appendHtml(val);
         });
     };
+
+
     if (_IE && _V < 7) {
         _nativeCommand(document, 'BackgroundImageCache', true);
     }
@@ -5729,6 +5791,8 @@
     K.instances = _instances;
     K.plugin = _plugin;
     K.lang = _lang;
+
+
     _plugin('core', function (K) {
         var self = this,
             shortcutKeys = {
@@ -6092,6 +6156,8 @@
                 } else {
                     cmd.range.selectNodeContents(div[0]);
                     cmd.select();
+                    div[0].tabIndex = -1;
+                    div[0].focus();
                 }
                 setTimeout(function () {
                     movePastedData();
@@ -6200,7 +6266,10 @@
                 });
         });
     });
+
+
 })(window);
+
 /*******************************************************************************
  * KindEditor - WYSIWYG HTML Editor for Internet
  * Copyright (C) 2006-2011 kindsoft.net
@@ -6209,7 +6278,6 @@
  * @site http://www.kindsoft.net/
  * @licence http://www.kindsoft.net/license.php
  *******************************************************************************/
-
 KindEditor.lang({
     source: 'HTML代码',
     preview: '预览',
@@ -6436,7 +6504,8 @@ KindEditor.lang({
         '2.html': '表格',
         '3.html': '项目编号'
     }
-}, 'zh_CN');
+}, 'zh-CN');
+KindEditor.options.langType = 'zh-CN';
 /*******************************************************************************
  * KindEditor - WYSIWYG HTML Editor for Internet
  * Copyright (C) 2006-2011 kindsoft.net
@@ -6445,7 +6514,6 @@ KindEditor.lang({
  * @site http://www.kindsoft.net/
  * @licence http://www.kindsoft.net/license.php
  *******************************************************************************/
-
 KindEditor.plugin('anchor', function (K) {
     var self = this, name = 'anchor', lang = self.lang(name + '.');
     self.plugin.anchor = {
@@ -6483,6 +6551,7 @@ KindEditor.plugin('anchor', function (K) {
     };
     self.clickToolbar(name, self.plugin.anchor.edit);
 });
+
 /*******************************************************************************
  * KindEditor - WYSIWYG HTML Editor for Internet
  * Copyright (C) 2006-2011 kindsoft.net
@@ -6491,14 +6560,11 @@ KindEditor.plugin('anchor', function (K) {
  * @site http://www.kindsoft.net/
  * @licence http://www.kindsoft.net/license.php
  *******************************************************************************/
-
 KindEditor.plugin('autoheight', function (K) {
     var self = this;
-
     if (!self.autoHeightMode) {
         return;
     }
-
     var minHeight;
 
     function hideScroll() {
@@ -6517,7 +6583,6 @@ KindEditor.plugin('autoheight', function (K) {
 
     function init() {
         minHeight = K.removeUnit(self.height);
-
         self.edit.afterChange(resetHeight);
         hideScroll();
         resetHeight();
@@ -6529,7 +6594,6 @@ KindEditor.plugin('autoheight', function (K) {
         self.afterCreate(init);
     }
 });
-
 /*
 * 如何实现真正的自动高度？
 * 修改编辑器高度之后，再次获取body内容高度时，最小值只会是当前iframe的设置高度，这样就导致高度只增不减。
@@ -6537,6 +6601,7 @@ KindEditor.plugin('autoheight', function (K) {
 * 由此就实现了真正的自动高度
 * 测试：chrome、firefox、IE9、IE8
 * */
+
 /*******************************************************************************
  * KindEditor - WYSIWYG HTML Editor for Internet
  * Copyright (C) 2006-2011 kindsoft.net
@@ -6545,9 +6610,6 @@ KindEditor.plugin('autoheight', function (K) {
  * @site http://www.kindsoft.net/
  * @licence http://www.kindsoft.net/license.php
  *******************************************************************************/
-
-// Baidu Maps: http://dev.baidu.com/wiki/map/index.php?title=%E9%A6%96%E9%A1%B5
-
 KindEditor.plugin('baidumap', function (K) {
     var self = this, name = 'baidumap', lang = self.lang(name + '.');
     var mapWidth = K.undef(self.mapWidth, 558);
@@ -6555,14 +6617,12 @@ KindEditor.plugin('baidumap', function (K) {
     self.clickToolbar(name, function () {
         var html = ['<div style="padding:10px 20px;">',
             '<div class="ke-header">',
-            // left start
             '<div class="ke-left">',
             lang.address + ' <input id="kindeditor_plugin_map_address" name="address" class="ke-input-text" value="" style="width:200px;" /> ',
             '<span class="ke-button-common ke-button-outer">',
             '<input type="button" name="searchBtn" class="ke-button-common ke-button" value="' + lang.search + '" />',
             '</span>',
             '</div>',
-            // right start
             '<div class="ke-right">',
             '<input type="checkbox" id="keInsertDynamicMap" name="insertDynamicMap" value="1" /> <label for="keInsertDynamicMap">' + lang.insertDynamicMap + '</label>',
             '</div>',
@@ -6626,12 +6686,12 @@ KindEditor.plugin('baidumap', function (K) {
             }
         });
         K('.ke-map', div).replaceWith(iframe);
-        // search map
         searchBtn.click(function () {
             win.search(addressBox.val());
         });
     });
 });
+
 /*******************************************************************************
  * KindEditor - WYSIWYG HTML Editor for Internet
  * Copyright (C) 2006-2011 kindsoft.net
@@ -6641,6 +6701,139 @@ KindEditor.plugin('baidumap', function (K) {
  * @licence http://www.kindsoft.net/license.php
  *******************************************************************************/
 
+
+KindEditor.plugin('map', function (K) {
+    var self = this, name = 'map', lang = self.lang(name + '.');
+    self.clickToolbar(name, function () {
+        var html = ['<div style="padding:10px 20px;">',
+            '<div class="ke-dialog-row">',
+            lang.address + ' <input id="kindeditor_plugin_map_address" name="address" class="ke-input-text" value="" style="width:200px;" /> ',
+            '<span class="ke-button-common ke-button-outer">',
+            '<input type="button" name="searchBtn" class="ke-button-common ke-button" value="' + lang.search + '" />',
+            '</span>',
+            '</div>',
+            '<div class="ke-map" style="width:558px;height:360px;"></div>',
+            '</div>'].join('');
+        var dialog = self.createDialog({
+            name: name,
+            width: 600,
+            title: self.lang(name),
+            body: html,
+            yesBtn: {
+                name: self.lang('yes'),
+                click: function (e) {
+                    var geocoder = win.geocoder,
+                        map = win.map,
+                        center = map.getCenter().lat() + ',' + map.getCenter().lng(),
+                        zoom = map.getZoom(),
+                        maptype = map.getMapTypeId(),
+                        url = 'http://maps.googleapis.com/maps/api/staticmap';
+                    url += '?center=' + encodeURIComponent(center);
+                    url += '&zoom=' + encodeURIComponent(zoom);
+                    url += '&size=558x360';
+                    url += '&maptype=' + encodeURIComponent(maptype);
+                    url += '&markers=' + encodeURIComponent(center);
+                    url += '&language=' + self.langType;
+                    url += '&sensor=false';
+                    self.exec('insertimage', url).hideDialog().focus();
+                }
+            },
+            beforeRemove: function () {
+                searchBtn.remove();
+                if (doc) {
+                    doc.write('');
+                }
+                iframe.remove();
+            }
+        });
+        var div = dialog.div,
+            addressBox = K('[name="address"]', div),
+            searchBtn = K('[name="searchBtn"]', div),
+            win, doc;
+        var iframeHtml = ['<!doctype html><html><head>',
+            '<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />',
+            '<style>',
+            '	html { height: 100% }',
+            '	body { height: 100%; margin: 0; padding: 0; background-color: #FFF }',
+            '	#map_canvas { height: 100% }',
+            '</style>',
+            '<script src="http://maps.googleapis.com/maps/api/js?sensor=false&language=' + self.langType + '"></script>',
+            '<script>',
+            'var map, geocoder;',
+            'function initialize() {',
+            '	var latlng = new google.maps.LatLng(31.230393, 121.473704);',
+            '	var options = {',
+            '		zoom: 11,',
+            '		center: latlng,',
+            '		disableDefaultUI: true,',
+            '		panControl: true,',
+            '		zoomControl: true,',
+            '		mapTypeControl: true,',
+            '		scaleControl: true,',
+            '		streetViewControl: false,',
+            '		overviewMapControl: true,',
+            '		mapTypeId: google.maps.MapTypeId.ROADMAP',
+            '	};',
+            '	map = new google.maps.Map(document.getElementById("map_canvas"), options);',
+            '	geocoder = new google.maps.Geocoder();',
+            '	geocoder.geocode({latLng: latlng}, function(results, status) {',
+            '		if (status == google.maps.GeocoderStatus.OK) {',
+            '			if (results[3]) {',
+            '				parent.document.getElementById("kindeditor_plugin_map_address").value = results[3].formatted_address;',
+            '			}',
+            '		}',
+            '	});',
+            '}',
+            'function search(address) {',
+            '	if (!map) return;',
+            '	geocoder.geocode({address : address}, function(results, status) {',
+            '		if (status == google.maps.GeocoderStatus.OK) {',
+            '			map.setZoom(11);',
+            '			map.setCenter(results[0].geometry.location);',
+            '			var marker = new google.maps.Marker({',
+            '				map: map,',
+            '				position: results[0].geometry.location',
+            '			});',
+            '		} else {',
+            '			alert("Invalid address: " + address);',
+            '		}',
+            '	});',
+            '}',
+            '</script>',
+            '</head>',
+            '<body onload="initialize();">',
+            '<div id="map_canvas" style="width:100%; height:100%"></div>',
+            '</body></html>'].join('\n');
+        var iframe = K('<iframe class="ke-textarea" frameborder="0" src="' + self.pluginsPath + 'map/map.html" style="width:558px;height:360px;"></iframe>');
+
+        function ready() {
+            win = iframe[0].contentWindow;
+            doc = K.iframeDoc(iframe);
+        }
+
+        iframe.bind('load', function () {
+            iframe.unbind('load');
+            if (K.IE) {
+                ready();
+            } else {
+                setTimeout(ready, 0);
+            }
+        });
+        K('.ke-map', div).replaceWith(iframe);
+        searchBtn.click(function () {
+            win.search(addressBox.val());
+        });
+    });
+});
+
+/*******************************************************************************
+ * KindEditor - WYSIWYG HTML Editor for Internet
+ * Copyright (C) 2006-2011 kindsoft.net
+ *
+ * @author Roddy <luolonghao@gmail.com>
+ * @site http://www.kindsoft.net/
+ * @licence http://www.kindsoft.net/license.php
+ *******************************************************************************/
 KindEditor.plugin('clearhtml', function (K) {
     var self = this, name = 'clearhtml';
     self.clickToolbar(name, function () {
@@ -6661,6 +6854,7 @@ KindEditor.plugin('clearhtml', function (K) {
         self.addBookmark();
     });
 });
+
 /*******************************************************************************
  * KindEditor - WYSIWYG HTML Editor for Internet
  * Copyright (C) 2006-2011 kindsoft.net
@@ -6670,8 +6864,7 @@ KindEditor.plugin('clearhtml', function (K) {
  * @licence http://www.kindsoft.net/license.php
  *******************************************************************************/
 
-// google code prettify: http://google-code-prettify.googlecode.com/
-// http://google-code-prettify.googlecode.com/
+
 
 KindEditor.plugin('code', function (K) {
     var self = this, name = 'code';
@@ -6723,6 +6916,7 @@ KindEditor.plugin('code', function (K) {
         textarea[0].focus();
     });
 });
+
 /*******************************************************************************
  * KindEditor - WYSIWYG HTML Editor for Internet
  * Copyright (C) 2006-2011 kindsoft.net
@@ -6731,7 +6925,6 @@ KindEditor.plugin('code', function (K) {
  * @site http://www.kindsoft.net/
  * @licence http://www.kindsoft.net/license.php
  *******************************************************************************/
-
 KindEditor.plugin('emoticons', function (K) {
     var self = this, name = 'emoticons',
         path = (self.emoticonsPath || self.pluginsPath + 'emoticons/images/'),
@@ -6860,6 +7053,7 @@ KindEditor.plugin('emoticons', function (K) {
         createPageTable(currentPageNum);
     });
 });
+
 /*******************************************************************************
  * KindEditor - WYSIWYG HTML Editor for Internet
  * Copyright (C) 2006-2011 kindsoft.net
@@ -6868,7 +7062,6 @@ KindEditor.plugin('emoticons', function (K) {
  * @site http://www.kindsoft.net/
  * @licence http://www.kindsoft.net/license.php
  *******************************************************************************/
-
 KindEditor.plugin('filemanager', function (K) {
     var self = this, name = 'filemanager',
         fileManagerJson = K.undef(self.fileManagerJson, self.basePath + 'php/file_manager_json.php'),
@@ -6891,18 +7084,15 @@ KindEditor.plugin('filemanager', function (K) {
         var width = K.undef(options.width, 650),
             height = K.undef(options.height, 510),
             dirName = K.undef(options.dirName, ''),
-            viewType = K.undef(options.viewType, 'VIEW').toUpperCase(), // "LIST" or "VIEW"
+            viewType = K.undef(options.viewType, 'VIEW').toUpperCase(),
             clickFn = options.clickFn;
         var html = [
             '<div style="padding:10px 20px;">',
-            // header start
             '<div class="ke-plugin-filemanager-header">',
-            // left start
             '<div class="ke-left">',
             '<img class="ke-inline-block" name="moveupImg" src="' + imgPath + 'go-up.gif" width="16" height="16" border="0" alt="" /> ',
             '<a class="ke-inline-block" name="moveupLink" href="javascript:;">' + lang.moveup + '</a>',
             '</div>',
-            // right start
             '<div class="ke-right">',
             lang.viewType + ' <select class="ke-inline-block" name="viewType">',
             '<option value="VIEW">' + lang.viewImage + '</option>',
@@ -6916,7 +7106,6 @@ KindEditor.plugin('filemanager', function (K) {
             '</div>',
             '<div class="ke-clearfix"></div>',
             '</div>',
-            // body start
             '<div class="ke-plugin-filemanager-body"></div>',
             '</div>'
         ].join('');
@@ -6966,14 +7155,12 @@ KindEditor.plugin('filemanager', function (K) {
         }
 
         function createCommon(result, createFunc) {
-            // remove events
             K.each(elList, function () {
                 this.unbind();
             });
             moveupLink.unbind();
             viewTypeBox.unbind();
             orderTypeBox.unbind();
-            // add events
             if (result.current_dir_path) {
                 moveupLink.click(function (e) {
                     reloadPage(result.moveup_dir_path, orderTypeBox.val(), createFunc);
@@ -7059,8 +7246,8 @@ KindEditor.plugin('filemanager', function (K) {
         reloadPage('', orderTypeBox.val(), viewType == 'VIEW' ? createView : createList);
         return dialog;
     }
-
 });
+
 /*******************************************************************************
  * KindEditor - WYSIWYG HTML Editor for Internet
  * Copyright (C) 2006-2011 kindsoft.net
@@ -7069,7 +7256,6 @@ KindEditor.plugin('filemanager', function (K) {
  * @site http://www.kindsoft.net/
  * @licence http://www.kindsoft.net/license.php
  *******************************************************************************/
-
 KindEditor.plugin('flash', function (K) {
     var self = this, name = 'flash', lang = self.lang(name + '.'),
         allowFlashUpload = K.undef(self.allowFlashUpload, true),
@@ -7082,7 +7268,6 @@ KindEditor.plugin('flash', function (K) {
         edit: function () {
             var html = [
                 '<div style="padding:20px;">',
-                //url
                 '<div class="ke-dialog-row">',
                 '<label for="keUrl" style="width:60px;">' + lang.url + '</label>',
                 '<input class="ke-input-text" type="text" id="keUrl" name="url" value="" style="width:160px;" /> &nbsp;',
@@ -7091,12 +7276,10 @@ KindEditor.plugin('flash', function (K) {
                 '<input type="button" class="ke-button-common ke-button" name="viewServer" value="' + lang.viewServer + '" />',
                 '</span>',
                 '</div>',
-                //width
                 '<div class="ke-dialog-row">',
                 '<label for="keWidth" style="width:60px;">' + lang.width + '</label>',
                 '<input type="text" id="keWidth" class="ke-input-text ke-input-number" name="width" value="550" maxlength="4" /> ',
                 '</div>',
-                //height
                 '<div class="ke-dialog-row">',
                 '<label for="keHeight" style="width:60px;">' + lang.height + '</label>',
                 '<input type="text" id="keHeight" class="ke-input-text ke-input-number" name="height" value="400" maxlength="4" /> ',
@@ -7146,7 +7329,6 @@ KindEditor.plugin('flash', function (K) {
                 widthBox = K('[name="width"]', div),
                 heightBox = K('[name="height"]', div);
             urlBox.val('http://');
-
             if (allowFlashUpload) {
                 var uploadbutton = K.uploadbutton({
                     button: K('.ke-upload-button', div)[0],
@@ -7181,7 +7363,6 @@ KindEditor.plugin('flash', function (K) {
             } else {
                 K('.ke-upload-button', div).hide();
             }
-
             if (allowFileManager) {
                 viewServerBtn.click(function (e) {
                     self.loadPlugin('filemanager', function () {
@@ -7203,7 +7384,6 @@ KindEditor.plugin('flash', function (K) {
             } else {
                 viewServerBtn.hide();
             }
-
             var img = self.plugin.getSelectedFlash();
             if (img) {
                 var attrs = K.mediaAttrs(img.attr('data-ke-tag'));
@@ -7216,12 +7396,12 @@ KindEditor.plugin('flash', function (K) {
         },
         'delete': function () {
             self.plugin.getSelectedFlash().remove();
-            // [IE] 删除图片后立即点击图片按钮出错
             self.addBookmark();
         }
     };
     self.clickToolbar(name, self.plugin.flash.edit);
 });
+
 /*******************************************************************************
  * KindEditor - WYSIWYG HTML Editor for Internet
  * Copyright (C) 2006-2011 kindsoft.net
@@ -7230,7 +7410,6 @@ KindEditor.plugin('flash', function (K) {
  * @site http://www.kindsoft.net/
  * @licence http://www.kindsoft.net/license.php
  *******************************************************************************/
-
 KindEditor.plugin('image', function (K) {
     var self = this, name = 'image',
         allowImageUpload = K.undef(self.allowImageUpload, true),
@@ -7244,7 +7423,6 @@ KindEditor.plugin('image', function (K) {
         filePostName = K.undef(self.filePostName, 'imgFile'),
         fillDescAfterUploadImage = K.undef(self.fillDescAfterUploadImage, false),
         lang = self.lang(name + '.');
-
     self.plugin.imageDialog = function (options) {
         var imageUrl = options.imageUrl,
             imageWidth = K.undef(options.imageWidth, ''),
@@ -7262,11 +7440,8 @@ KindEditor.plugin('image', function (K) {
         }
         var html = [
             '<div style="padding:20px;">',
-            //tabs
             '<div class="tabs"></div>',
-            //remote image - start
             '<div class="tab1" style="display:none;">',
-            //url
             '<div class="ke-dialog-row">',
             '<label for="remoteUrl" style="width:60px;">' + lang.remoteUrl + '</label>',
             '<input type="text" id="remoteUrl" class="ke-input-text" name="url" value="" style="width:200px;" /> &nbsp;',
@@ -7274,32 +7449,26 @@ KindEditor.plugin('image', function (K) {
             '<input type="button" class="ke-button-common ke-button" name="viewServer" value="' + lang.viewServer + '" />',
             '</span>',
             '</div>',
-            //size
             '<div class="ke-dialog-row">',
             '<label for="remoteWidth" style="width:60px;">' + lang.size + '</label>',
             lang.width + ' <input type="text" id="remoteWidth" class="ke-input-text ke-input-number" name="width" value="" maxlength="4" /> ',
             lang.height + ' <input type="text" class="ke-input-text ke-input-number" name="height" value="" maxlength="4" /> ',
             '<img class="ke-refresh-btn" src="' + imgPath + 'refresh.png" width="16" height="16" alt="" style="cursor:pointer;" title="' + lang.resetSize + '" />',
             '</div>',
-            //align
             '<div class="ke-dialog-row">',
             '<label style="width:60px;">' + lang.align + '</label>',
             '<input type="radio" name="align" class="ke-inline-block" value="" checked="checked" /> <img name="defaultImg" src="' + imgPath + 'align_top.gif" width="23" height="25" alt="" />',
             ' <input type="radio" name="align" class="ke-inline-block" value="left" /> <img name="leftImg" src="' + imgPath + 'align_left.gif" width="23" height="25" alt="" />',
             ' <input type="radio" name="align" class="ke-inline-block" value="right" /> <img name="rightImg" src="' + imgPath + 'align_right.gif" width="23" height="25" alt="" />',
             '</div>',
-            //title
             '<div class="ke-dialog-row">',
             '<label for="remoteTitle" style="width:60px;">' + lang.imgTitle + '</label>',
             '<input type="text" id="remoteTitle" class="ke-input-text" name="title" value="" style="width:200px;" />',
             '</div>',
             '</div>',
-            //remote image - end
-            //local upload - start
             '<div class="tab2" style="display:none;">',
             '<iframe name="' + target + '" style="display:none;"></iframe>',
             '<form class="ke-upload-area ke-form" method="post" enctype="multipart/form-data" target="' + target + '" action="' + K.addParam(uploadJson, 'dir=image') + '">',
-            //file
             '<div class="ke-dialog-row">',
             hiddenElements.join(''),
             '<label style="width:60px;">' + lang.localUrl + '</label>',
@@ -7308,7 +7477,6 @@ KindEditor.plugin('image', function (K) {
             '</div>',
             '</form>',
             '</div>',
-            //local upload - end
             '</div>'
         ].join('');
         var dialogWidth = showLocal || allowFileManager ? 450 : 400,
@@ -7322,11 +7490,9 @@ KindEditor.plugin('image', function (K) {
                 yesBtn: {
                     name: self.lang('yes'),
                     click: function (e) {
-                        // Bugfix: http://code.google.com/p/kindeditor/issues/detail?id=319
                         if (dialog.isLoading) {
                             return;
                         }
-                        // insert local image
                         if (showLocal && showRemote && tabs && tabs.selectedIndex === 1 || !showRemote) {
                             if (uploadbutton.fileBox.val() == '') {
                                 alert(self.lang('pleaseSelectFile'));
@@ -7337,7 +7503,6 @@ KindEditor.plugin('image', function (K) {
                             localUrlBox.val('');
                             return;
                         }
-                        // insert remote image
                         var url = K.trim(urlBox.val()),
                             width = widthBox.val(),
                             height = heightBox.val(),
@@ -7375,7 +7540,6 @@ KindEditor.plugin('image', function (K) {
                 }
             }),
             div = dialog.div;
-
         var urlBox = K('[name="url"]', div),
             localUrlBox = K('[name="localUrl"]', div),
             viewServerBtn = K('[name="viewServer"]', div),
@@ -7384,7 +7548,6 @@ KindEditor.plugin('image', function (K) {
             refreshBtn = K('.ke-refresh-btn', div),
             titleBox = K('.tab1 [name="title"]', div),
             alignBox = K('.tab1 [name="align"]', div);
-
         var tabs;
         if (showRemote && showLocal) {
             tabs = K.tabs({
@@ -7406,7 +7569,6 @@ KindEditor.plugin('image', function (K) {
         } else if (showLocal) {
             K('.tab2', div).show();
         }
-
         var uploadbutton = K.uploadbutton({
             button: K('.ke-upload-button', div)[0],
             fieldName: filePostName,
@@ -7534,7 +7696,6 @@ KindEditor.plugin('image', function (K) {
                     } else {
                         self.exec('insertimage', url, title, width, height, border, align);
                     }
-                    // Bugfix: [Firefox] 上传图片后，总是出现正在加载的样式，需要延迟执行hideDialog
                     setTimeout(function () {
                         self.hideDialog().focus();
                     }, 0);
@@ -7547,12 +7708,12 @@ KindEditor.plugin('image', function (K) {
                 target = target.parent();
             }
             target.remove();
-            // [IE] 删除图片后立即点击图片按钮出错
             self.addBookmark();
         }
     };
     self.clickToolbar(name, self.plugin.image.edit);
 });
+
 /*******************************************************************************
  * KindEditor - WYSIWYG HTML Editor for Internet
  * Copyright (C) 2006-2011 kindsoft.net
@@ -7561,7 +7722,6 @@ KindEditor.plugin('image', function (K) {
  * @site http://www.kindsoft.net/
  * @licence http://www.kindsoft.net/license.php
  *******************************************************************************/
-
 KindEditor.plugin('insertfile', function (K) {
     var self = this, name = 'insertfile',
         allowFileUpload = K.undef(self.allowFileUpload, true),
@@ -7585,12 +7745,10 @@ KindEditor.plugin('insertfile', function (K) {
             '<input type="button" class="ke-button-common ke-button" name="viewServer" value="' + lang.viewServer + '" />',
             '</span>',
             '</div>',
-            //title
             '<div class="ke-dialog-row">',
             '<label for="keTitle" style="width:60px;">' + lang.title + '</label>',
             '<input type="text" id="keTitle" class="ke-input-text" name="title" value="" style="width:160px;" /></div>',
             '</div>',
-            //form end
             '</form>',
             '</div>'
         ].join('');
@@ -7617,11 +7775,9 @@ KindEditor.plugin('insertfile', function (K) {
                 }
             }),
             div = dialog.div;
-
         var urlBox = K('[name="url"]', div),
             viewServerBtn = K('[name="viewServer"]', div),
             titleBox = K('[name="title"]', div);
-
         if (allowFileUpload) {
             var uploadbutton = K.uploadbutton({
                 button: K('.ke-upload-button', div)[0],
@@ -7691,6 +7847,7 @@ KindEditor.plugin('insertfile', function (K) {
         });
     });
 });
+
 /*******************************************************************************
  * KindEditor - WYSIWYG HTML Editor for Internet
  * Copyright (C) 2006-2011 kindsoft.net
@@ -7699,7 +7856,6 @@ KindEditor.plugin('insertfile', function (K) {
  * @site http://www.kindsoft.net/
  * @licence http://www.kindsoft.net/license.php
  *******************************************************************************/
-
 KindEditor.plugin('lineheight', function (K) {
     var self = this, name = 'lineheight', lang = self.lang(name + '.');
     self.clickToolbar(name, function () {
@@ -7729,6 +7885,7 @@ KindEditor.plugin('lineheight', function (K) {
         });
     });
 });
+
 /*******************************************************************************
  * KindEditor - WYSIWYG HTML Editor for Internet
  * Copyright (C) 2006-2011 kindsoft.net
@@ -7737,18 +7894,15 @@ KindEditor.plugin('lineheight', function (K) {
  * @site http://www.kindsoft.net/
  * @licence http://www.kindsoft.net/license.php
  *******************************************************************************/
-
 KindEditor.plugin('link', function (K) {
     var self = this, name = 'link';
     self.plugin.link = {
         edit: function () {
             var lang = self.lang(name + '.'),
                 html = '<div style="padding:20px;">' +
-                    //url
                     '<div class="ke-dialog-row">' +
                     '<label for="keUrl" style="width:60px;">' + lang.url + '</label>' +
                     '<input class="ke-input-text" type="text" id="keUrl" name="url" value="" style="width:260px;" /></div>' +
-                    //type
                     '<div class="ke-dialog-row"">' +
                     '<label for="keType" style="width:60px;">' + lang.linkType + '</label>' +
                     '<select id="keType" name="type"></select>' +
@@ -7795,6 +7949,7 @@ KindEditor.plugin('link', function (K) {
     };
     self.clickToolbar(name, self.plugin.link.edit);
 });
+
 /*******************************************************************************
  * KindEditor - WYSIWYG HTML Editor for Internet
  * Copyright (C) 2006-2011 kindsoft.net
@@ -7803,146 +7958,6 @@ KindEditor.plugin('link', function (K) {
  * @site http://www.kindsoft.net/
  * @licence http://www.kindsoft.net/license.php
  *******************************************************************************/
-
-// Google Maps: http://code.google.com/apis/maps/index.html
-
-KindEditor.plugin('map', function (K) {
-    var self = this, name = 'map', lang = self.lang(name + '.');
-    self.clickToolbar(name, function () {
-        var html = ['<div style="padding:10px 20px;">',
-            '<div class="ke-dialog-row">',
-            lang.address + ' <input id="kindeditor_plugin_map_address" name="address" class="ke-input-text" value="" style="width:200px;" /> ',
-            '<span class="ke-button-common ke-button-outer">',
-            '<input type="button" name="searchBtn" class="ke-button-common ke-button" value="' + lang.search + '" />',
-            '</span>',
-            '</div>',
-            '<div class="ke-map" style="width:558px;height:360px;"></div>',
-            '</div>'].join('');
-        var dialog = self.createDialog({
-            name: name,
-            width: 600,
-            title: self.lang(name),
-            body: html,
-            yesBtn: {
-                name: self.lang('yes'),
-                click: function (e) {
-                    var geocoder = win.geocoder,
-                        map = win.map,
-                        center = map.getCenter().lat() + ',' + map.getCenter().lng(),
-                        zoom = map.getZoom(),
-                        maptype = map.getMapTypeId(),
-                        url = 'http://maps.googleapis.com/maps/api/staticmap';
-                    url += '?center=' + encodeURIComponent(center);
-                    url += '&zoom=' + encodeURIComponent(zoom);
-                    url += '&size=558x360';
-                    url += '&maptype=' + encodeURIComponent(maptype);
-                    url += '&markers=' + encodeURIComponent(center);
-                    url += '&language=' + self.langType;
-                    url += '&sensor=false';
-                    self.exec('insertimage', url).hideDialog().focus();
-                }
-            },
-            beforeRemove: function () {
-                searchBtn.remove();
-                if (doc) {
-                    doc.write('');
-                }
-                iframe.remove();
-            }
-        });
-        var div = dialog.div,
-            addressBox = K('[name="address"]', div),
-            searchBtn = K('[name="searchBtn"]', div),
-            win, doc;
-        var iframeHtml = ['<!doctype html><html><head>',
-            '<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />',
-            '<style>',
-            '	html { height: 100% }',
-            '	body { height: 100%; margin: 0; padding: 0; background-color: #FFF }',
-            '	#map_canvas { height: 100% }',
-            '</style>',
-            '<script src="http://maps.googleapis.com/maps/api/js?sensor=false&language=' + self.langType + '"></script>',
-            '<script>',
-            'var map, geocoder;',
-            'function initialize() {',
-            '	var latlng = new google.maps.LatLng(31.230393, 121.473704);',
-            '	var options = {',
-            '		zoom: 11,',
-            '		center: latlng,',
-            '		disableDefaultUI: true,',
-            '		panControl: true,',
-            '		zoomControl: true,',
-            '		mapTypeControl: true,',
-            '		scaleControl: true,',
-            '		streetViewControl: false,',
-            '		overviewMapControl: true,',
-            '		mapTypeId: google.maps.MapTypeId.ROADMAP',
-            '	};',
-            '	map = new google.maps.Map(document.getElementById("map_canvas"), options);',
-            '	geocoder = new google.maps.Geocoder();',
-            '	geocoder.geocode({latLng: latlng}, function(results, status) {',
-            '		if (status == google.maps.GeocoderStatus.OK) {',
-            '			if (results[3]) {',
-            '				parent.document.getElementById("kindeditor_plugin_map_address").value = results[3].formatted_address;',
-            '			}',
-            '		}',
-            '	});',
-            '}',
-            'function search(address) {',
-            '	if (!map) return;',
-            '	geocoder.geocode({address : address}, function(results, status) {',
-            '		if (status == google.maps.GeocoderStatus.OK) {',
-            '			map.setZoom(11);',
-            '			map.setCenter(results[0].geometry.location);',
-            '			var marker = new google.maps.Marker({',
-            '				map: map,',
-            '				position: results[0].geometry.location',
-            '			});',
-            '		} else {',
-            '			alert("Invalid address: " + address);',
-            '		}',
-            '	});',
-            '}',
-            '</script>',
-            '</head>',
-            '<body onload="initialize();">',
-            '<div id="map_canvas" style="width:100%; height:100%"></div>',
-            '</body></html>'].join('\n');
-        // TODO：用doc.write(iframeHtml)方式加载时，在IE6上第一次加载报错，暂时使用src方式
-        var iframe = K('<iframe class="ke-textarea" frameborder="0" src="' + self.pluginsPath + 'map/map.html" style="width:558px;height:360px;"></iframe>');
-
-        function ready() {
-            win = iframe[0].contentWindow;
-            doc = K.iframeDoc(iframe);
-            //doc.open();
-            //doc.write(iframeHtml);
-            //doc.close();
-        }
-
-        iframe.bind('load', function () {
-            iframe.unbind('load');
-            if (K.IE) {
-                ready();
-            } else {
-                setTimeout(ready, 0);
-            }
-        });
-        K('.ke-map', div).replaceWith(iframe);
-        // search map
-        searchBtn.click(function () {
-            win.search(addressBox.val());
-        });
-    });
-});
-/*******************************************************************************
- * KindEditor - WYSIWYG HTML Editor for Internet
- * Copyright (C) 2006-2011 kindsoft.net
- *
- * @author Roddy <luolonghao@gmail.com>
- * @site http://www.kindsoft.net/
- * @licence http://www.kindsoft.net/license.php
- *******************************************************************************/
-
 KindEditor.plugin('media', function (K) {
     var self = this, name = 'media', lang = self.lang(name + '.'),
         allowMediaUpload = K.undef(self.allowMediaUpload, true),
@@ -7955,7 +7970,6 @@ KindEditor.plugin('media', function (K) {
         edit: function () {
             var html = [
                 '<div style="padding:20px;">',
-                //url
                 '<div class="ke-dialog-row">',
                 '<label for="keUrl" style="width:60px;">' + lang.url + '</label>',
                 '<input class="ke-input-text" type="text" id="keUrl" name="url" value="" style="width:160px;" /> &nbsp;',
@@ -7964,17 +7978,14 @@ KindEditor.plugin('media', function (K) {
                 '<input type="button" class="ke-button-common ke-button" name="viewServer" value="' + lang.viewServer + '" />',
                 '</span>',
                 '</div>',
-                //width
                 '<div class="ke-dialog-row">',
                 '<label for="keWidth" style="width:60px;">' + lang.width + '</label>',
                 '<input type="text" id="keWidth" class="ke-input-text ke-input-number" name="width" value="550" maxlength="4" />',
                 '</div>',
-                //height
                 '<div class="ke-dialog-row">',
                 '<label for="keHeight" style="width:60px;">' + lang.height + '</label>',
                 '<input type="text" id="keHeight" class="ke-input-text ke-input-number" name="height" value="400" maxlength="4" />',
                 '</div>',
-                //autostart
                 '<div class="ke-dialog-row">',
                 '<label for="keAutostart">' + lang.autostart + '</label>',
                 '<input type="checkbox" id="keAutostart" name="autostart" value="" /> ',
@@ -8027,7 +8038,6 @@ KindEditor.plugin('media', function (K) {
                 heightBox = K('[name="height"]', div),
                 autostartBox = K('[name="autostart"]', div);
             urlBox.val('http://');
-
             if (allowMediaUpload) {
                 var uploadbutton = K.uploadbutton({
                     button: K('.ke-upload-button', div)[0],
@@ -8062,7 +8072,6 @@ KindEditor.plugin('media', function (K) {
             } else {
                 K('.ke-upload-button', div).hide();
             }
-
             if (allowFileManager) {
                 viewServerBtn.click(function (e) {
                     self.loadPlugin('filemanager', function () {
@@ -8084,7 +8093,6 @@ KindEditor.plugin('media', function (K) {
             } else {
                 viewServerBtn.hide();
             }
-
             var img = self.plugin.getSelectedMedia();
             if (img) {
                 var attrs = K.mediaAttrs(img.attr('data-ke-tag'));
@@ -8098,12 +8106,12 @@ KindEditor.plugin('media', function (K) {
         },
         'delete': function () {
             self.plugin.getSelectedMedia().remove();
-            // [IE] 删除图片后立即点击图片按钮出错
             self.addBookmark();
         }
     };
     self.clickToolbar(name, self.plugin.media.edit);
 });
+
 /*******************************************************************************
  * KindEditor - WYSIWYG HTML Editor for Internet
  * Copyright (C) 2006-2011 kindsoft.net
@@ -8112,10 +8120,7 @@ KindEditor.plugin('media', function (K) {
  * @site http://www.kindsoft.net/
  * @licence http://www.kindsoft.net/license.php
  *******************************************************************************/
-
-
 (function (K) {
-
     function KSWFUpload(options) {
         this.init(options);
     }
@@ -8128,7 +8133,6 @@ KindEditor.plugin('media', function (K) {
             };
             self.options = options;
             self.progressbars = {};
-            // template
             self.div = K(options.container).html([
                 '<div class="ke-swfupload">',
                 '<div class="ke-swfupload-top">',
@@ -8226,7 +8230,6 @@ KindEditor.plugin('media', function (K) {
                 }
             };
             self.swfu = new SWFUpload(settings);
-
             K('.ke-swfupload-startupload input', self.div).click(function () {
                 self.swfu.startUpload();
             });
@@ -8268,22 +8271,17 @@ KindEditor.plugin('media', function (K) {
                     K(this).removeClass('ke-on');
                 });
             itemDiv.append(photoDiv);
-
             var img = K('<img src="' + file.url + '" class="ke-img" data-status="' + file.filestatus + '" width="80" height="80" alt="' + file.name + '" />');
             photoDiv.append(img);
             K('<span class="ke-delete"></span>').appendTo(photoDiv).click(function () {
                 self.removeFile(file.id);
             });
             var statusDiv = K('<div class="ke-status"></div>').appendTo(photoDiv);
-            // progressbar
             K(['<div class="ke-progressbar">',
                 '<div class="ke-progressbar-bar"><div class="ke-progressbar-bar-inner"></div></div>',
                 '<div class="ke-progressbar-percent">0%</div></div>'].join('')).hide().appendTo(statusDiv);
-            // message
             K('<div class="ke-message">' + self.options.pendingMessage + '</div>').appendTo(statusDiv);
-
             itemDiv.append('<div class="ke-name">' + file.name + '</div>');
-
             self.progressbars[file.id] = {
                 bar: K('.ke-progressbar-bar-inner', photoDiv),
                 percent: K('.ke-progressbar-percent', photoDiv)
@@ -8295,13 +8293,10 @@ KindEditor.plugin('media', function (K) {
             this.div.html('');
         }
     });
-
     K.swfupload = function (element, options) {
         return new KSWFUpload(element, options);
     };
-
 })(KindEditor);
-
 KindEditor.plugin('multiimage', function (K) {
     var self = this, name = 'multiimage',
         formatUploadUrl = K.undef(self.formatUploadUrl, true),
@@ -8312,7 +8307,6 @@ KindEditor.plugin('multiimage', function (K) {
         imageUploadLimit = K.undef(self.imageUploadLimit, 20),
         filePostName = K.undef(self.filePostName, 'imgFile'),
         lang = self.lang(name + '.');
-
     self.plugin.multiImageDialog = function (options) {
         var clickFn = options.clickFn,
             uploadDesc = K.tmpl(lang.uploadDesc, {uploadLimit: imageUploadLimit, sizeLimit: imageSizeLimit});
@@ -8341,18 +8335,16 @@ KindEditor.plugin('multiimage', function (K) {
                     }
                 },
                 beforeRemove: function () {
-                    // IE9 bugfix: https://github.com/kindsoft/kindeditor/issues/72
                     if (!K.IE || K.V <= 8) {
                         swfupload.remove();
                     }
                 }
             }),
             div = dialog.div;
-
         var swfupload = K.swfupload({
             container: K('.swfupload', div),
-            buttonImageUrl: imgPath + (self.langType == 'zh_CN' ? 'select-files-zh_CN.png' : 'select-files-en.png'),
-            buttonWidth: self.langType == 'zh_CN' ? 72 : 88,
+            buttonImageUrl: imgPath + (self.langType == 'zh-CN' ? 'select-files-zh-CN.png' : 'select-files-en.png'),
+            buttonWidth: self.langType == 'zh-CN' ? 72 : 88,
             buttonHeight: 23,
             fileIconUrl: imgPath + 'image.png',
             uploadDesc: uploadDesc,
@@ -8376,7 +8368,6 @@ KindEditor.plugin('multiimage', function (K) {
                 self.errorDialog(html);
             }
         });
-
         return dialog;
     };
     self.clickToolbar(name, function () {
@@ -8391,7 +8382,6 @@ KindEditor.plugin('multiimage', function (K) {
                     }
                     self.exec('insertimage', data.url, data.title, data.width, data.height, data.border, data.align);
                 });
-                // Bugfix: [Firefox] 上传图片后，总是出现正在加载的样式，需要延迟执行hideDialog
                 setTimeout(function () {
                     self.hideDialog().focus();
                 }, 0);
@@ -8399,45 +8389,21 @@ KindEditor.plugin('multiimage', function (K) {
         });
     });
 });
-
-
-/**
- * SWFUpload: http://www.swfupload.org, http://swfupload.googlecode.com
- *
- * mmSWFUpload 1.0: Flash upload dialog - http://profandesign.se/swfupload/,  http://www.vinterwebb.se/
- *
- * SWFUpload is (c) 2006-2007 Lars Huring, Olov Nilz閚 and Mammon Media and is released under the MIT License:
- * http://www.opensource.org/licenses/mit-license.php
- *
- * SWFUpload 2 is (c) 2007-2008 Jake Roberts and is released under the MIT License:
- * http://www.opensource.org/licenses/mit-license.php
- *
- */
-
-
 /* ******************* */
 /* Constructor & Init  */
 /* ******************* */
-
 (function () {
-
     window.SWFUpload = function (settings) {
         this.initSWFUpload(settings);
     };
-
     SWFUpload.prototype.initSWFUpload = function (settings) {
         try {
-            this.customSettings = {};	// A container where developers can place their own settings associated with this instance.
+            this.customSettings = {};
             this.settings = settings;
             this.eventQueue = [];
             this.movieName = "KindEditor_SWFUpload_" + SWFUpload.movieCount++;
             this.movieElement = null;
-
-
-            // Setup global control tracking
             SWFUpload.instances[this.movieName] = this;
-
-            // Load the settings.  Load the Flash movie.
             this.initSettings();
             this.loadFlash();
             this.displayDebugInfo();
@@ -8446,7 +8412,6 @@ KindEditor.plugin('multiimage', function (K) {
             throw ex;
         }
     };
-
     /* *************** */
     /* Static Members  */
     /* *************** */
@@ -8492,40 +8457,26 @@ KindEditor.plugin('multiimage', function (K) {
         TRANSPARENT: "transparent",
         OPAQUE: "opaque"
     };
-
-// Private: takes a URL, determines if it is relative and converts to an absolute URL
-// using the current site. Only processes the URL if it can, otherwise returns the URL untouched
     SWFUpload.completeURL = function (url) {
         if (typeof (url) !== "string" || url.match(/^https?:\/\//i) || url.match(/^\//)) {
             return url;
         }
-
         var currentURL = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ":" + window.location.port : "");
-
         var indexSlash = window.location.pathname.lastIndexOf("/");
         if (indexSlash <= 0) {
             path = "/";
         } else {
             path = window.location.pathname.substr(0, indexSlash) + "/";
         }
-
         return /*currentURL +*/ path + url;
-
     };
-
-
     /* ******************** */
     /* Instance Members  */
     /* ******************** */
-
-// Private: initSettings ensures that all the
-// settings are set, getting a default value if one was not assigned.
     SWFUpload.prototype.initSettings = function () {
         this.ensureDefault = function (settingName, defaultValue) {
             this.settings[settingName] = (this.settings[settingName] == undefined) ? defaultValue : this.settings[settingName];
         };
-
-        // Upload backend settings
         this.ensureDefault("upload_url", "");
         this.ensureDefault("preserve_relative_urls", false);
         this.ensureDefault("file_post_name", "Filedata");
@@ -8534,19 +8485,13 @@ KindEditor.plugin('multiimage', function (K) {
         this.ensureDefault("requeue_on_error", false);
         this.ensureDefault("http_success", []);
         this.ensureDefault("assume_success_timeout", 0);
-
-        // File Settings
         this.ensureDefault("file_types", "*.*");
         this.ensureDefault("file_types_description", "All Files");
-        this.ensureDefault("file_size_limit", 0);	// Default zero means "unlimited"
+        this.ensureDefault("file_size_limit", 0);
         this.ensureDefault("file_upload_limit", 0);
         this.ensureDefault("file_queue_limit", 0);
-
-        // Flash Settings
         this.ensureDefault("flash_url", "swfupload.swf");
         this.ensureDefault("prevent_swf_caching", true);
-
-        // Button Settings
         this.ensureDefault("button_image_url", "");
         this.ensureDefault("button_width", 1);
         this.ensureDefault("button_height", 1);
@@ -8560,79 +8505,48 @@ KindEditor.plugin('multiimage', function (K) {
         this.ensureDefault("button_placeholder", null);
         this.ensureDefault("button_cursor", SWFUpload.CURSOR.ARROW);
         this.ensureDefault("button_window_mode", SWFUpload.WINDOW_MODE.WINDOW);
-
-        // Debug Settings
         this.ensureDefault("debug", false);
-        this.settings.debug_enabled = this.settings.debug;	// Here to maintain v2 API
-
-        // Event Handlers
+        this.settings.debug_enabled = this.settings.debug;
         this.settings.return_upload_start_handler = this.returnUploadStart;
         this.ensureDefault("swfupload_loaded_handler", null);
         this.ensureDefault("file_dialog_start_handler", null);
         this.ensureDefault("file_queued_handler", null);
         this.ensureDefault("file_queue_error_handler", null);
         this.ensureDefault("file_dialog_complete_handler", null);
-
         this.ensureDefault("upload_start_handler", null);
         this.ensureDefault("upload_progress_handler", null);
         this.ensureDefault("upload_error_handler", null);
         this.ensureDefault("upload_success_handler", null);
         this.ensureDefault("upload_complete_handler", null);
-
         this.ensureDefault("debug_handler", this.debugMessage);
-
         this.ensureDefault("custom_settings", {});
-
-        // Other settings
         this.customSettings = this.settings.custom_settings;
-
-        // Update the flash url if needed
         if (!!this.settings.prevent_swf_caching) {
             this.settings.flash_url = this.settings.flash_url + (this.settings.flash_url.indexOf("?") < 0 ? "?" : "&") + "preventswfcaching=" + new Date().getTime();
         }
-
         if (!this.settings.preserve_relative_urls) {
-            //this.settings.flash_url = SWFUpload.completeURL(this.settings.flash_url);	// Don't need to do this one since flash doesn't look at it
             this.settings.upload_url = SWFUpload.completeURL(this.settings.upload_url);
             this.settings.button_image_url = SWFUpload.completeURL(this.settings.button_image_url);
         }
-
         delete this.ensureDefault;
     };
-
-// Private: loadFlash replaces the button_placeholder element with the flash movie.
     SWFUpload.prototype.loadFlash = function () {
         var targetElement, tempParent;
-
-        // Make sure an element with the ID we are going to use doesn't already exist
         if (document.getElementById(this.movieName) !== null) {
             throw "ID " + this.movieName + " is already in use. The Flash Object could not be added";
         }
-
-        // Get the element where we will be placing the flash movie
         targetElement = document.getElementById(this.settings.button_placeholder_id) || this.settings.button_placeholder;
-
         if (targetElement == undefined) {
             throw "Could not find the placeholder element: " + this.settings.button_placeholder_id;
         }
-
-        // Append the container and load the flash
         tempParent = document.createElement("div");
-        tempParent.innerHTML = this.getFlashHTML();	// Using innerHTML is non-standard but the only sensible way to dynamically add Flash in IE (and maybe other browsers)
+        tempParent.innerHTML = this.getFlashHTML();
         targetElement.parentNode.replaceChild(tempParent.firstChild, targetElement);
-
-        // Fix IE Flash/Form bug
         if (window[this.movieName] == undefined) {
             window[this.movieName] = this.getMovieElement();
         }
-
     };
-
-// Private: getFlashHTML generates the object tag needed to embed the flash in to the document
     SWFUpload.prototype.getFlashHTML = function () {
-        // Flash Satay object syntax: http://www.alistapart.com/articles/flashsatay
-        // Fix bug for IE9
-        // http://www.kindsoft.net/view.php?bbsid=7&postid=5825&pagenum=1
         var classid = '';
         if (KindEditor.IE && KindEditor.V > 8) {
             classid = ' classid = "clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"';
@@ -8646,15 +8560,9 @@ KindEditor.plugin('multiimage', function (K) {
             '<param name="flashvars" value="' + this.getFlashVars() + '" />',
             '</object>'].join("");
     };
-
-// Private: getFlashVars builds the parameter string that will be passed
-// to flash in the flashvars param.
     SWFUpload.prototype.getFlashVars = function () {
-        // Build a string from the post param object
         var paramString = this.buildParamString();
         var httpSuccessString = this.settings.http_success.join(",");
-
-        // Build the parameter string
         return ["movieName=", encodeURIComponent(this.movieName),
             "&amp;uploadURL=", encodeURIComponent(this.settings.upload_url),
             "&amp;useQueryString=", encodeURIComponent(this.settings.use_query_string),
@@ -8681,27 +8589,18 @@ KindEditor.plugin('multiimage', function (K) {
             "&amp;buttonCursor=", encodeURIComponent(this.settings.button_cursor)
         ].join("");
     };
-
-// Public: getMovieElement retrieves the DOM reference to the Flash element added by SWFUpload
-// The element is cached after the first lookup
     SWFUpload.prototype.getMovieElement = function () {
         if (this.movieElement == undefined) {
             this.movieElement = document.getElementById(this.movieName);
         }
-
         if (this.movieElement === null) {
             throw "Could not find Flash element";
         }
-
         return this.movieElement;
     };
-
-// Private: buildParamString takes the name/value pairs in the post_params setting object
-// and joins them up in to a string formatted "name=value&amp;name=value"
     SWFUpload.prototype.buildParamString = function () {
         var postParams = this.settings.post_params;
         var paramStringPairs = [];
-
         if (typeof (postParams) === "object") {
             for (var name in postParams) {
                 if (postParams.hasOwnProperty(name)) {
@@ -8709,26 +8608,14 @@ KindEditor.plugin('multiimage', function (K) {
                 }
             }
         }
-
         return paramStringPairs.join("&amp;");
     };
-
-// Public: Used to remove a SWFUpload instance from the page. This method strives to remove
-// all references to the SWF, and other objects so memory is properly freed.
-// Returns true if everything was destroyed. Returns a false if a failure occurs leaving SWFUpload in an inconsistant state.
-// Credits: Major improvements provided by steffen
     SWFUpload.prototype.destroy = function () {
         try {
-            // Make sure Flash is done before we try to remove it
             this.cancelUpload(null, false);
-
-
-            // Remove the SWFUpload DOM nodes
             var movieElement = null;
             movieElement = this.getMovieElement();
-
-            if (movieElement && typeof (movieElement.CallFunction) === "unknown") { // We only want to do this in IE
-                // Loop through all the movie's properties and remove all function references (DOM/JS IE 6/7 memory leak workaround)
+            if (movieElement && typeof (movieElement.CallFunction) === "unknown") {
                 for (var i in movieElement) {
                     try {
                         if (typeof (movieElement[i]) === "function") {
@@ -8737,39 +8624,24 @@ KindEditor.plugin('multiimage', function (K) {
                     } catch (ex1) {
                     }
                 }
-
-                // Remove the Movie Element from the page
                 try {
                     movieElement.parentNode.removeChild(movieElement);
                 } catch (ex) {
                 }
             }
-
-            // Remove IE form fix reference
             window[this.movieName] = null;
-
-            // Destroy other references
             SWFUpload.instances[this.movieName] = null;
             delete SWFUpload.instances[this.movieName];
-
             this.movieElement = null;
             this.settings = null;
             this.customSettings = null;
             this.eventQueue = null;
             this.movieName = null;
-
-
             return true;
         } catch (ex2) {
             return false;
         }
     };
-
-
-// Public: displayDebugInfo prints out settings and configuration
-// information about this SWFUpload instance.
-// This function (and any references to it) can be deleted when placing
-// SWFUpload in production.
     SWFUpload.prototype.displayDebugInfo = function () {
         this.debug(
             [
@@ -8791,9 +8663,7 @@ KindEditor.plugin('multiimage', function (K) {
                 "\t", "file_upload_limit:        ", this.settings.file_upload_limit, "\n",
                 "\t", "file_queue_limit:         ", this.settings.file_queue_limit, "\n",
                 "\t", "debug:                    ", this.settings.debug.toString(), "\n",
-
                 "\t", "prevent_swf_caching:      ", this.settings.prevent_swf_caching.toString(), "\n",
-
                 "\t", "button_placeholder_id:    ", this.settings.button_placeholder_id.toString(), "\n",
                 "\t", "button_placeholder:       ", (this.settings.button_placeholder ? "Set" : "Not Set"), "\n",
                 "\t", "button_image_url:         ", this.settings.button_image_url.toString(), "\n",
@@ -8805,7 +8675,6 @@ KindEditor.plugin('multiimage', function (K) {
                 "\t", "button_text_left_padding: ", this.settings.button_text_left_padding.toString(), "\n",
                 "\t", "button_action:            ", this.settings.button_action.toString(), "\n",
                 "\t", "button_disabled:          ", this.settings.button_disabled.toString(), "\n",
-
                 "\t", "custom_settings:          ", this.settings.custom_settings.toString(), "\n",
                 "Event Handlers:\n",
                 "\t", "swfupload_loaded_handler assigned:  ", (typeof this.settings.swfupload_loaded_handler === "function").toString(), "\n",
@@ -8821,11 +8690,9 @@ KindEditor.plugin('multiimage', function (K) {
             ].join("")
         );
     };
-
     /* Note: addSetting and getSetting are no longer used by SWFUpload but are included
 	the maintain v2 API compatibility
 */
-// Public: (Deprecated) addSetting adds a setting value. If the value given is undefined or null then the default_value is used.
     SWFUpload.prototype.addSetting = function (name, value, default_value) {
         if (value == undefined) {
             return (this.settings[name] = default_value);
@@ -8833,88 +8700,50 @@ KindEditor.plugin('multiimage', function (K) {
             return (this.settings[name] = value);
         }
     };
-
-// Public: (Deprecated) getSetting gets a setting. Returns an empty string if the setting was not found.
     SWFUpload.prototype.getSetting = function (name) {
         if (this.settings[name] != undefined) {
             return this.settings[name];
         }
-
         return "";
     };
-
-
-// Private: callFlash handles function calls made to the Flash element.
-// Calls are made with a setTimeout for some functions to work around
-// bugs in the ExternalInterface library.
     SWFUpload.prototype.callFlash = function (functionName, argumentArray) {
         argumentArray = argumentArray || [];
-
         var movieElement = this.getMovieElement();
         var returnValue, returnString;
-
-        // Flash's method if calling ExternalInterface methods (code adapted from MooTools).
         try {
             returnString = movieElement.CallFunction('<invoke name="' + functionName + '" returntype="javascript">' + __flash__argumentsToXML(argumentArray, 0) + '</invoke>');
             returnValue = eval(returnString);
         } catch (ex) {
             throw "Call to " + functionName + " failed";
         }
-
-        // Unescape file post param values
         if (returnValue != undefined && typeof returnValue.post === "object") {
             returnValue = this.unescapeFilePostParams(returnValue);
         }
-
         return returnValue;
     };
-
     /* *****************************
 	-- Flash control methods --
 	Your UI should use these
 	to operate SWFUpload
    ***************************** */
-
-// WARNING: this function does not work in Flash Player 10
-// Public: selectFile causes a File Selection Dialog window to appear.  This
-// dialog only allows 1 file to be selected.
     SWFUpload.prototype.selectFile = function () {
         this.callFlash("SelectFile");
     };
-
-// WARNING: this function does not work in Flash Player 10
-// Public: selectFiles causes a File Selection Dialog window to appear/ This
-// dialog allows the user to select any number of files
-// Flash Bug Warning: Flash limits the number of selectable files based on the combined length of the file names.
-// If the selection name length is too long the dialog will fail in an unpredictable manner.  There is no work-around
-// for this bug.
     SWFUpload.prototype.selectFiles = function () {
         this.callFlash("SelectFiles");
     };
-
-
-// Public: startUpload starts uploading the first file in the queue unless
-// the optional parameter 'fileID' specifies the ID
     SWFUpload.prototype.startUpload = function (fileID) {
         this.callFlash("StartUpload", [fileID]);
     };
-
-// Public: cancelUpload cancels any queued file.  The fileID parameter may be the file ID or index.
-// If you do not specify a fileID the current uploading file or first file in the queue is cancelled.
-// If you do not want the uploadError event to trigger you can specify false for the triggerErrorEvent parameter.
     SWFUpload.prototype.cancelUpload = function (fileID, triggerErrorEvent) {
         if (triggerErrorEvent !== false) {
             triggerErrorEvent = true;
         }
         this.callFlash("CancelUpload", [fileID, triggerErrorEvent]);
     };
-
-// Public: stopUpload stops the current upload and requeues the file at the beginning of the queue.
-// If nothing is currently uploading then nothing happens.
     SWFUpload.prototype.stopUpload = function () {
         this.callFlash("StopUpload");
     };
-
     /* ************************
  * Settings methods
  *   These methods change the SWFUpload settings.
@@ -8922,22 +8751,12 @@ KindEditor.plugin('multiimage', function (K) {
  *   since many of the settings need to be passed to Flash in order to take
  *   effect.
  * *********************** */
-
-// Public: getStats gets the file statistics object.
     SWFUpload.prototype.getStats = function () {
         return this.callFlash("GetStats");
     };
-
-// Public: setStats changes the SWFUpload statistics.  You shouldn't need to
-// change the statistics but you can.  Changing the statistics does not
-// affect SWFUpload accept for the successful_uploads count which is used
-// by the upload_limit setting to determine how many files the user may upload.
     SWFUpload.prototype.setStats = function (statsObject) {
         this.callFlash("SetStats", [statsObject]);
     };
-
-// Public: getFile retrieves a File object by ID or Index.  If the file is
-// not found then 'null' is returned.
     SWFUpload.prototype.getFile = function (fileID) {
         if (typeof (fileID) === "number") {
             return this.callFlash("GetFileByIndex", [fileID]);
@@ -8945,224 +8764,152 @@ KindEditor.plugin('multiimage', function (K) {
             return this.callFlash("GetFile", [fileID]);
         }
     };
-
-// Public: addFileParam sets a name/value pair that will be posted with the
-// file specified by the Files ID.  If the name already exists then the
-// exiting value will be overwritten.
     SWFUpload.prototype.addFileParam = function (fileID, name, value) {
         return this.callFlash("AddFileParam", [fileID, name, value]);
     };
-
-// Public: removeFileParam removes a previously set (by addFileParam) name/value
-// pair from the specified file.
     SWFUpload.prototype.removeFileParam = function (fileID, name) {
         this.callFlash("RemoveFileParam", [fileID, name]);
     };
-
-// Public: setUploadUrl changes the upload_url setting.
     SWFUpload.prototype.setUploadURL = function (url) {
         this.settings.upload_url = url.toString();
         this.callFlash("SetUploadURL", [url]);
     };
-
-// Public: setPostParams changes the post_params setting
     SWFUpload.prototype.setPostParams = function (paramsObject) {
         this.settings.post_params = paramsObject;
         this.callFlash("SetPostParams", [paramsObject]);
     };
-
-// Public: addPostParam adds post name/value pair.  Each name can have only one value.
     SWFUpload.prototype.addPostParam = function (name, value) {
         this.settings.post_params[name] = value;
         this.callFlash("SetPostParams", [this.settings.post_params]);
     };
-
-// Public: removePostParam deletes post name/value pair.
     SWFUpload.prototype.removePostParam = function (name) {
         delete this.settings.post_params[name];
         this.callFlash("SetPostParams", [this.settings.post_params]);
     };
-
-// Public: setFileTypes changes the file_types setting and the file_types_description setting
     SWFUpload.prototype.setFileTypes = function (types, description) {
         this.settings.file_types = types;
         this.settings.file_types_description = description;
         this.callFlash("SetFileTypes", [types, description]);
     };
-
-// Public: setFileSizeLimit changes the file_size_limit setting
     SWFUpload.prototype.setFileSizeLimit = function (fileSizeLimit) {
         this.settings.file_size_limit = fileSizeLimit;
         this.callFlash("SetFileSizeLimit", [fileSizeLimit]);
     };
-
-// Public: setFileUploadLimit changes the file_upload_limit setting
     SWFUpload.prototype.setFileUploadLimit = function (fileUploadLimit) {
         this.settings.file_upload_limit = fileUploadLimit;
         this.callFlash("SetFileUploadLimit", [fileUploadLimit]);
     };
-
-// Public: setFileQueueLimit changes the file_queue_limit setting
     SWFUpload.prototype.setFileQueueLimit = function (fileQueueLimit) {
         this.settings.file_queue_limit = fileQueueLimit;
         this.callFlash("SetFileQueueLimit", [fileQueueLimit]);
     };
-
-// Public: setFilePostName changes the file_post_name setting
     SWFUpload.prototype.setFilePostName = function (filePostName) {
         this.settings.file_post_name = filePostName;
         this.callFlash("SetFilePostName", [filePostName]);
     };
-
-// Public: setUseQueryString changes the use_query_string setting
     SWFUpload.prototype.setUseQueryString = function (useQueryString) {
         this.settings.use_query_string = useQueryString;
         this.callFlash("SetUseQueryString", [useQueryString]);
     };
-
-// Public: setRequeueOnError changes the requeue_on_error setting
     SWFUpload.prototype.setRequeueOnError = function (requeueOnError) {
         this.settings.requeue_on_error = requeueOnError;
         this.callFlash("SetRequeueOnError", [requeueOnError]);
     };
-
-// Public: setHTTPSuccess changes the http_success setting
     SWFUpload.prototype.setHTTPSuccess = function (http_status_codes) {
         if (typeof http_status_codes === "string") {
             http_status_codes = http_status_codes.replace(" ", "").split(",");
         }
-
         this.settings.http_success = http_status_codes;
         this.callFlash("SetHTTPSuccess", [http_status_codes]);
     };
-
-// Public: setHTTPSuccess changes the http_success setting
     SWFUpload.prototype.setAssumeSuccessTimeout = function (timeout_seconds) {
         this.settings.assume_success_timeout = timeout_seconds;
         this.callFlash("SetAssumeSuccessTimeout", [timeout_seconds]);
     };
-
-// Public: setDebugEnabled changes the debug_enabled setting
     SWFUpload.prototype.setDebugEnabled = function (debugEnabled) {
         this.settings.debug_enabled = debugEnabled;
         this.callFlash("SetDebugEnabled", [debugEnabled]);
     };
-
-// Public: setButtonImageURL loads a button image sprite
     SWFUpload.prototype.setButtonImageURL = function (buttonImageURL) {
         if (buttonImageURL == undefined) {
             buttonImageURL = "";
         }
-
         this.settings.button_image_url = buttonImageURL;
         this.callFlash("SetButtonImageURL", [buttonImageURL]);
     };
-
-// Public: setButtonDimensions resizes the Flash Movie and button
     SWFUpload.prototype.setButtonDimensions = function (width, height) {
         this.settings.button_width = width;
         this.settings.button_height = height;
-
         var movie = this.getMovieElement();
         if (movie != undefined) {
             movie.style.width = width + "px";
             movie.style.height = height + "px";
         }
-
         this.callFlash("SetButtonDimensions", [width, height]);
     };
-// Public: setButtonText Changes the text overlaid on the button
     SWFUpload.prototype.setButtonText = function (html) {
         this.settings.button_text = html;
         this.callFlash("SetButtonText", [html]);
     };
-// Public: setButtonTextPadding changes the top and left padding of the text overlay
     SWFUpload.prototype.setButtonTextPadding = function (left, top) {
         this.settings.button_text_top_padding = top;
         this.settings.button_text_left_padding = left;
         this.callFlash("SetButtonTextPadding", [left, top]);
     };
-
-// Public: setButtonTextStyle changes the CSS used to style the HTML/Text overlaid on the button
     SWFUpload.prototype.setButtonTextStyle = function (css) {
         this.settings.button_text_style = css;
         this.callFlash("SetButtonTextStyle", [css]);
     };
-// Public: setButtonDisabled disables/enables the button
     SWFUpload.prototype.setButtonDisabled = function (isDisabled) {
         this.settings.button_disabled = isDisabled;
         this.callFlash("SetButtonDisabled", [isDisabled]);
     };
-// Public: setButtonAction sets the action that occurs when the button is clicked
     SWFUpload.prototype.setButtonAction = function (buttonAction) {
         this.settings.button_action = buttonAction;
         this.callFlash("SetButtonAction", [buttonAction]);
     };
-
-// Public: setButtonCursor changes the mouse cursor displayed when hovering over the button
     SWFUpload.prototype.setButtonCursor = function (cursor) {
         this.settings.button_cursor = cursor;
         this.callFlash("SetButtonCursor", [cursor]);
     };
-
     /* *******************************
 	Flash Event Interfaces
 	These functions are used by Flash to trigger the various
 	events.
-
 	All these functions a Private.
-
 	Because the ExternalInterface library is buggy the event calls
 	are added to a queue and the queue then executed by a setTimeout.
 	This ensures that events are executed in a determinate order and that
 	the ExternalInterface bugs are avoided.
 ******************************* */
-
     SWFUpload.prototype.queueEvent = function (handlerName, argumentArray) {
-        // Warning: Don't call this.debug inside here or you'll create an infinite loop
-
         if (argumentArray == undefined) {
             argumentArray = [];
         } else if (!(argumentArray instanceof Array)) {
             argumentArray = [argumentArray];
         }
-
         var self = this;
         if (typeof this.settings[handlerName] === "function") {
-            // Queue the event
             this.eventQueue.push(function () {
                 this.settings[handlerName].apply(this, argumentArray);
             });
-
-            // Execute the next queued event
             setTimeout(function () {
                 self.executeNextEvent();
             }, 0);
-
         } else if (this.settings[handlerName] !== null) {
             throw "Event handler " + handlerName + " is unknown or is not a function";
         }
     };
-
-// Private: Causes the next event in the queue to be executed.  Since events are queued using a setTimeout
-// we must queue them in order to garentee that they are executed in order.
     SWFUpload.prototype.executeNextEvent = function () {
-        // Warning: Don't call this.debug inside here or you'll create an infinite loop
-
         var f = this.eventQueue ? this.eventQueue.shift() : null;
         if (typeof (f) === "function") {
             f.apply(this);
         }
     };
-
-// Private: unescapeFileParams is part of a workaround for a flash bug where objects passed through ExternalInterface cannot have
-// properties that contain characters that are not valid for JavaScript identifiers. To work around this
-// the Flash Component escapes the parameter names and we must unescape again before passing them along.
     SWFUpload.prototype.unescapeFilePostParams = function (file) {
         var reg = /[$]([0-9a-f]{4})/i;
         var unescapedPost = {};
         var uk;
-
         if (file != undefined) {
             for (var k in file.post) {
                 if (file.post.hasOwnProperty(k)) {
@@ -9174,14 +8921,10 @@ KindEditor.plugin('multiimage', function (K) {
                     unescapedPost[uk] = file.post[k];
                 }
             }
-
             file.post = unescapedPost;
         }
-
         return file;
     };
-
-// Private: Called by Flash to see if JS can call in to Flash (test if External Interface is working)
     SWFUpload.prototype.testExternalInterface = function () {
         try {
             return this.callFlash("TestExternalInterface");
@@ -9189,29 +8932,18 @@ KindEditor.plugin('multiimage', function (K) {
             return false;
         }
     };
-
-// Private: This event is called by Flash when it has finished loading. Don't modify this.
-// Use the swfupload_loaded_handler event setting to execute custom code when SWFUpload has loaded.
     SWFUpload.prototype.flashReady = function () {
-        // Check that the movie element is loaded correctly with its ExternalInterface methods defined
         var movieElement = this.getMovieElement();
-
         if (!movieElement) {
             this.debug("Flash called back ready but the flash movie can't be found.");
             return;
         }
-
         this.cleanUp(movieElement);
-
         this.queueEvent("swfupload_loaded_handler");
     };
-
-// Private: removes Flash added fuctions to the DOM node to prevent memory leaks in IE.
-// This function is called by Flash each time the ExternalInterface functions are created.
     SWFUpload.prototype.cleanUp = function (movieElement) {
-        // Pro-actively unhook all the Flash functions
         try {
-            if (this.movieElement && typeof (movieElement.CallFunction) === "unknown") { // We only want to do this in IE
+            if (this.movieElement && typeof (movieElement.CallFunction) === "unknown") {
                 this.debug("Removing Flash functions hooks (this should only run in IE and should prevent memory leaks)");
                 for (var key in movieElement) {
                     try {
@@ -9223,54 +8955,39 @@ KindEditor.plugin('multiimage', function (K) {
                 }
             }
         } catch (ex1) {
-
         }
-
-        // Fix Flashes own cleanup code so if the SWFMovie was removed from the page
-        // it doesn't display errors.
         window["__flash__removeCallback"] = function (instance, name) {
             try {
                 if (instance) {
                     instance[name] = null;
                 }
             } catch (flashEx) {
-
             }
         };
-
     };
-
-
     /* This is a chance to do something before the browse window opens */
     SWFUpload.prototype.fileDialogStart = function () {
         this.queueEvent("file_dialog_start_handler");
     };
-
-
     /* Called when a file is successfully added to the queue. */
     SWFUpload.prototype.fileQueued = function (file) {
         file = this.unescapeFilePostParams(file);
         this.queueEvent("file_queued_handler", file);
     };
-
-
     /* Handle errors that occur when an attempt to queue a file fails. */
     SWFUpload.prototype.fileQueueError = function (file, errorCode, message) {
         file = this.unescapeFilePostParams(file);
         this.queueEvent("file_queue_error_handler", [file, errorCode, message]);
     };
-
     /* Called after the file dialog has closed and the selected files have been queued.
 	You could call startUpload here if you want the queued files to begin uploading immediately. */
     SWFUpload.prototype.fileDialogComplete = function (numFilesSelected, numFilesQueued, numFilesInQueue) {
         this.queueEvent("file_dialog_complete_handler", [numFilesSelected, numFilesQueued, numFilesInQueue]);
     };
-
     SWFUpload.prototype.uploadStart = function (file) {
         file = this.unescapeFilePostParams(file);
         this.queueEvent("return_upload_start_handler", file);
     };
-
     SWFUpload.prototype.returnUploadStart = function (file) {
         var returnValue;
         if (typeof this.settings.upload_start_handler === "function") {
@@ -9279,67 +8996,46 @@ KindEditor.plugin('multiimage', function (K) {
         } else if (this.settings.upload_start_handler != undefined) {
             throw "upload_start_handler must be a function";
         }
-
-        // Convert undefined to true so if nothing is returned from the upload_start_handler it is
-        // interpretted as 'true'.
         if (returnValue === undefined) {
             returnValue = true;
         }
-
         returnValue = !!returnValue;
-
         this.callFlash("ReturnUploadStart", [returnValue]);
     };
-
-
     SWFUpload.prototype.uploadProgress = function (file, bytesComplete, bytesTotal) {
         file = this.unescapeFilePostParams(file);
         this.queueEvent("upload_progress_handler", [file, bytesComplete, bytesTotal]);
     };
-
     SWFUpload.prototype.uploadError = function (file, errorCode, message) {
         file = this.unescapeFilePostParams(file);
         this.queueEvent("upload_error_handler", [file, errorCode, message]);
     };
-
     SWFUpload.prototype.uploadSuccess = function (file, serverData, responseReceived) {
         file = this.unescapeFilePostParams(file);
         this.queueEvent("upload_success_handler", [file, serverData, responseReceived]);
     };
-
     SWFUpload.prototype.uploadComplete = function (file) {
         file = this.unescapeFilePostParams(file);
         this.queueEvent("upload_complete_handler", file);
     };
-
     /* Called by SWFUpload JavaScript and Flash functions when debug is enabled. By default it writes messages to the
    internal debug console.  You can override this event and have messages written where you want. */
     SWFUpload.prototype.debug = function (message) {
         this.queueEvent("debug_handler", message);
     };
-
-
     /* **********************************
 	Debug Console
 	The debug console is a self contained, in page location
 	for debug message to be sent.  The Debug Console adds
 	itself to the body if necessary.
-
 	The console is automatically scrolled as messages appear.
-
 	If you are using your own debug handler or when you deploy to production and
 	have debug disabled you can remove these functions to reduce the file size
 	and complexity.
 ********************************** */
-
-// Private: debugMessage is the default debug_handler.  If you want to print debug messages
-// call the debug() function.  When overriding the function your own function should
-// check to see if the debug setting is true before outputting debug information.
     SWFUpload.prototype.debugMessage = function (message) {
         if (this.settings.debug) {
             var exceptionMessage, exceptionValues = [];
-
-            // Check for an exception object and print it nicely
             if (typeof message === "object" && typeof message.name === "string" && typeof message.message === "string") {
                 for (var key in message) {
                     if (message.hasOwnProperty(key)) {
@@ -9355,18 +9051,14 @@ KindEditor.plugin('multiimage', function (K) {
             }
         }
     };
-
     SWFUpload.Console = {};
     SWFUpload.Console.writeLine = function (message) {
         var console, documentForm;
-
         try {
             console = document.getElementById("SWFUpload_Console");
-
             if (!console) {
                 documentForm = document.createElement("form");
                 document.getElementsByTagName("body")[0].appendChild(documentForm);
-
                 console = document.createElement("textarea");
                 console.id = "SWFUpload_Console";
                 console.style.fontFamily = "monospace";
@@ -9378,21 +9070,16 @@ KindEditor.plugin('multiimage', function (K) {
                 console.style.margin = "5px";
                 documentForm.appendChild(console);
             }
-
             console.value += message + "\n";
-
             console.scrollTop = console.scrollHeight - console.clientHeight;
         } catch (ex) {
             alert("Exception: " + ex.name + " Message: " + ex.message);
         }
     };
-
 })();
-
 (function () {
     /*
 	Queue Plug-in
-
 	Features:
 		*Adds a cancelQueue() method for cancelling the entire queue.
 		*All queued files are uploaded when startUpload() is called.
@@ -9400,79 +9087,59 @@ KindEditor.plugin('multiimage', function (K) {
 		 If false is not returned (strict comparison) then the queue upload is continued.
 		*Adds a QueueComplete event that is fired when all the queued files have finished uploading.
 		 Set the event handler with the queue_complete_handler setting.
-
 	*/
-
     if (typeof (SWFUpload) === "function") {
         SWFUpload.queue = {};
-
         SWFUpload.prototype.initSettings = (function (oldInitSettings) {
             return function () {
                 if (typeof (oldInitSettings) === "function") {
                     oldInitSettings.call(this);
                 }
-
                 this.queueSettings = {};
-
                 this.queueSettings.queue_cancelled_flag = false;
                 this.queueSettings.queue_upload_count = 0;
-
                 this.queueSettings.user_upload_complete_handler = this.settings.upload_complete_handler;
                 this.queueSettings.user_upload_start_handler = this.settings.upload_start_handler;
                 this.settings.upload_complete_handler = SWFUpload.queue.uploadCompleteHandler;
                 this.settings.upload_start_handler = SWFUpload.queue.uploadStartHandler;
-
                 this.settings.queue_complete_handler = this.settings.queue_complete_handler || null;
             };
         })(SWFUpload.prototype.initSettings);
-
         SWFUpload.prototype.startUpload = function (fileID) {
             this.queueSettings.queue_cancelled_flag = false;
             this.callFlash("StartUpload", [fileID]);
         };
-
         SWFUpload.prototype.cancelQueue = function () {
             this.queueSettings.queue_cancelled_flag = true;
             this.stopUpload();
-
             var stats = this.getStats();
             while (stats.files_queued > 0) {
                 this.cancelUpload();
                 stats = this.getStats();
             }
         };
-
         SWFUpload.queue.uploadStartHandler = function (file) {
             var returnValue;
             if (typeof (this.queueSettings.user_upload_start_handler) === "function") {
                 returnValue = this.queueSettings.user_upload_start_handler.call(this, file);
             }
-
-            // To prevent upload a real "FALSE" value must be returned, otherwise default to a real "TRUE" value.
             returnValue = (returnValue === false) ? false : true;
-
             this.queueSettings.queue_cancelled_flag = !returnValue;
-
             return returnValue;
         };
-
         SWFUpload.queue.uploadCompleteHandler = function (file) {
             var user_upload_complete_handler = this.queueSettings.user_upload_complete_handler;
             var continueUpload;
-
             if (file.filestatus === SWFUpload.FILE_STATUS.COMPLETE) {
                 this.queueSettings.queue_upload_count++;
             }
-
             if (typeof (user_upload_complete_handler) === "function") {
                 continueUpload = (user_upload_complete_handler.call(this, file) === false) ? false : true;
             } else if (file.filestatus === SWFUpload.FILE_STATUS.QUEUED) {
-                // If the file was stopped and re-queued don't restart the upload
                 continueUpload = false;
             } else {
                 continueUpload = true;
             }
-
             if (continueUpload) {
                 var stats = this.getStats();
                 if (stats.files_queued > 0 && this.queueSettings.queue_cancelled_flag === false) {
@@ -9487,8 +9154,8 @@ KindEditor.plugin('multiimage', function (K) {
             }
         };
     }
-
 })();
+
 /*******************************************************************************
  * KindEditor - WYSIWYG HTML Editor for Internet
  * Copyright (C) 2006-2011 kindsoft.net
@@ -9497,12 +9164,10 @@ KindEditor.plugin('multiimage', function (K) {
  * @site http://www.kindsoft.net/
  * @licence http://www.kindsoft.net/license.php
  *******************************************************************************/
-
 KindEditor.plugin('pagebreak', function (K) {
     var self = this;
     var name = 'pagebreak';
     var pagebreakHtml = K.undef(self.pagebreakHtml, '<hr style="page-break-after: always;" class="ke-pagebreak" />');
-
     self.clickToolbar(name, function () {
         var cmd = self.cmd, range = cmd.range;
         self.focus();
@@ -9516,6 +9181,7 @@ KindEditor.plugin('pagebreak', function (K) {
         }
     });
 });
+
 /*******************************************************************************
  * KindEditor - WYSIWYG HTML Editor for Internet
  * Copyright (C) 2006-2011 kindsoft.net
@@ -9524,7 +9190,6 @@ KindEditor.plugin('pagebreak', function (K) {
  * @site http://www.kindsoft.net/
  * @licence http://www.kindsoft.net/license.php
  *******************************************************************************/
-
 KindEditor.plugin('plainpaste', function (K) {
     var self = this, name = 'plainpaste';
     self.clickToolbar(name, function () {
@@ -9557,6 +9222,7 @@ KindEditor.plugin('plainpaste', function (K) {
         textarea[0].focus();
     });
 });
+
 /*******************************************************************************
  * KindEditor - WYSIWYG HTML Editor for Internet
  * Copyright (C) 2006-2011 kindsoft.net
@@ -9565,7 +9231,6 @@ KindEditor.plugin('plainpaste', function (K) {
  * @site http://www.kindsoft.net/
  * @licence http://www.kindsoft.net/license.php
  *******************************************************************************/
-
 KindEditor.plugin('preview', function (K) {
     var self = this, name = 'preview', undefined;
     self.clickToolbar(name, function () {
@@ -9588,6 +9253,7 @@ KindEditor.plugin('preview', function (K) {
         iframe[0].contentWindow.focus();
     });
 });
+
 /*******************************************************************************
  * KindEditor - WYSIWYG HTML Editor for Internet
  * Copyright (C) 2006-2011 kindsoft.net
@@ -9596,7 +9262,6 @@ KindEditor.plugin('preview', function (K) {
  * @site http://www.kindsoft.net/
  * @licence http://www.kindsoft.net/license.php
  *******************************************************************************/
-
 KindEditor.plugin('quickformat', function (K) {
     var self = this, name = 'quickformat',
         blockMap = K.toMap('blockquote,center,div,h1,h2,h3,h4,h5,h6,p');
@@ -9647,30 +9312,6 @@ KindEditor.plugin('quickformat', function (K) {
     });
 });
 
-/**
- --------------------------
- abcd<br />
- 1234<br />
-
- to
-
- <p style="text-indent:2em;">
- abcd<br />
- 1234<br />
- </p>
-
- --------------------------
-
- &nbsp; abcd<img>1233
- <p>1234</p>
-
- to
-
- <p style="text-indent:2em;">abcd<img>1233</p>
- <p style="text-indent:2em;">1234</p>
-
- --------------------------
- */
 /*******************************************************************************
  * KindEditor - WYSIWYG HTML Editor for Internet
  * Copyright (C) 2006-2011 kindsoft.net
@@ -9679,11 +9320,9 @@ KindEditor.plugin('quickformat', function (K) {
  * @site http://www.kindsoft.net/
  * @licence http://www.kindsoft.net/license.php
  *******************************************************************************/
-
 KindEditor.plugin('table', function (K) {
     var self = this, name = 'table', lang = self.lang(name + '.'), zeroborder = 'ke-zeroborder';
 
-    // 设置颜色
     function _setColor(box, color) {
         color = color.toUpperCase();
         box.css('background-color', color);
@@ -9691,7 +9330,6 @@ KindEditor.plugin('table', function (K) {
         box.html(color);
     }
 
-    // 初始化取色器
     var pickerList = [];
 
     function _initColorPicker(dialogDiv, colorBox) {
@@ -9731,7 +9369,6 @@ KindEditor.plugin('table', function (K) {
         });
     }
 
-    // 取得下一行cell的index
     function _getCellIndex(table, row, cell) {
         var rowSpanCount = 0;
         for (var i = 0, len = row.cells.length; i < len; i++) {
@@ -9744,17 +9381,14 @@ KindEditor.plugin('table', function (K) {
     }
 
     self.plugin.table = {
-        //insert or modify table
         prop: function (isInsert) {
             var html = [
                 '<div style="padding:20px;">',
-                //rows, cols
                 '<div class="ke-dialog-row">',
                 '<label for="keRows" style="width:90px;">' + lang.cells + '</label>',
                 lang.rows + ' <input type="text" id="keRows" class="ke-input-text ke-input-number" name="rows" value="" maxlength="4" /> &nbsp; ',
                 lang.cols + ' <input type="text" class="ke-input-text ke-input-number" name="cols" value="" maxlength="4" />',
                 '</div>',
-                //width, height
                 '<div class="ke-dialog-row">',
                 '<label for="keWidth" style="width:90px;">' + lang.size + '</label>',
                 lang.width + ' <input type="text" id="keWidth" class="ke-input-text ke-input-number" name="width" value="" maxlength="4" /> &nbsp; ',
@@ -9768,13 +9402,11 @@ KindEditor.plugin('table', function (K) {
                 '<option value="px">' + lang.px + '</option>',
                 '</select>',
                 '</div>',
-                //space, padding
                 '<div class="ke-dialog-row">',
                 '<label for="kePadding" style="width:90px;">' + lang.space + '</label>',
                 lang.padding + ' <input type="text" id="kePadding" class="ke-input-text ke-input-number" name="padding" value="" maxlength="4" /> &nbsp; ',
                 lang.spacing + ' <input type="text" class="ke-input-text ke-input-number" name="spacing" value="" maxlength="4" />',
                 '</div>',
-                //align
                 '<div class="ke-dialog-row">',
                 '<label for="keAlign" style="width:90px;">' + lang.align + '</label>',
                 '<select id="keAlign" name="align">',
@@ -9784,13 +9416,11 @@ KindEditor.plugin('table', function (K) {
                 '<option value="right">' + lang.alignRight + '</option>',
                 '</select>',
                 '</div>',
-                //border
                 '<div class="ke-dialog-row">',
                 '<label for="keBorder" style="width:90px;">' + lang.border + '</label>',
                 lang.borderWidth + ' <input type="text" id="keBorder" class="ke-input-text ke-input-number" name="border" value="" maxlength="4" /> &nbsp; ',
                 lang.borderColor + ' <span class="ke-inline-block ke-input-color"></span>',
                 '</div>',
-                //background color
                 '<div class="ke-dialog-row">',
                 '<label for="keBgColor" style="width:90px;">' + lang.backgroundColor + '</label>',
                 '<span class="ke-inline-block ke-input-color"></span>',
@@ -9856,7 +9486,6 @@ KindEditor.plugin('table', function (K) {
                                 borderBox[0].focus();
                                 return;
                             }
-                            //modify table
                             if (table) {
                                 if (width !== '') {
                                     table.width(width + widthType);
@@ -9914,7 +9543,6 @@ KindEditor.plugin('table', function (K) {
                                 self.addBookmark();
                                 return;
                             }
-                            //insert new table
                             var style = '';
                             if (width !== '') {
                                 style += 'width:' + width + widthType + ';';
@@ -9981,14 +9609,12 @@ KindEditor.plugin('table', function (K) {
             _initColorPicker(div, colorBox.eq(1));
             _setColor(colorBox.eq(0), '#000000');
             _setColor(colorBox.eq(1), '');
-            // foucs and select
             rowsBox[0].focus();
             rowsBox[0].select();
             var table;
             if (isInsert) {
                 return;
             }
-            //get selected table node
             table = self.plugin.getSelectedTable();
             if (table) {
                 rowsBox.val(table[0].rows.length);
@@ -10018,11 +9644,9 @@ KindEditor.plugin('table', function (K) {
                 widthBox[0].select();
             }
         },
-        //modify cell
         cellprop: function () {
             var html = [
                 '<div style="padding:20px;">',
-                //width, height
                 '<div class="ke-dialog-row">',
                 '<label for="keWidth" style="width:90px;">' + lang.size + '</label>',
                 lang.width + ' <input type="text" id="keWidth" class="ke-input-text ke-input-number" name="width" value="" maxlength="4" /> &nbsp; ',
@@ -10036,7 +9660,6 @@ KindEditor.plugin('table', function (K) {
                 '<option value="px">' + lang.px + '</option>',
                 '</select>',
                 '</div>',
-                //align
                 '<div class="ke-dialog-row">',
                 '<label for="keAlign" style="width:90px;">' + lang.align + '</label>',
                 lang.textAlign + ' <select id="keAlign" name="textAlign">',
@@ -10053,13 +9676,11 @@ KindEditor.plugin('table', function (K) {
                 '<option value="baseline">' + lang.alignBaseline + '</option>',
                 '</select>',
                 '</div>',
-                //border
                 '<div class="ke-dialog-row">',
                 '<label for="keBorder" style="width:90px;">' + lang.border + '</label>',
                 lang.borderWidth + ' <input type="text" id="keBorder" class="ke-input-text ke-input-number" name="border" value="" maxlength="4" /> &nbsp; ',
                 lang.borderColor + ' <span class="ke-inline-block ke-input-color"></span>',
                 '</div>',
-                //background color
                 '<div class="ke-dialog-row">',
                 '<label for="keBgColor" style="width:90px;">' + lang.backgroundColor + '</label>',
                 '<span class="ke-inline-block ke-input-color"></span>',
@@ -10136,10 +9757,8 @@ KindEditor.plugin('table', function (K) {
             _initColorPicker(div, colorBox.eq(1));
             _setColor(colorBox.eq(0), '#000000');
             _setColor(colorBox.eq(1), '');
-            // foucs and select
             widthBox[0].focus();
             widthBox[0].select();
-            // get selected cell
             var cell = self.plugin.getSelectedCell();
             var match,
                 cellWidth = cell[0].style.width || cell[0].width || '',
@@ -10181,14 +9800,11 @@ KindEditor.plugin('table', function (K) {
                 row = self.plugin.getSelectedRow()[0],
                 cell = self.plugin.getSelectedCell()[0],
                 index = cell.cellIndex + offset;
-            // 取得第一行的index
             index += table.rows[0].cells.length - row.cells.length;
-
             for (var i = 0, len = table.rows.length; i < len; i++) {
                 var newRow = table.rows[i],
                     newCell = newRow.insertCell(index);
                 newCell.innerHTML = K.IE ? '' : '<br />';
-                // 调整下一行的单元格index
                 index = _getCellIndex(table, newRow, newCell);
             }
             self.cmd.range.selectNodeContents(cell).collapse(true);
@@ -10210,20 +9826,16 @@ KindEditor.plugin('table', function (K) {
                 rowIndex = row.rowIndex + (cell.rowSpan - 1) + offset;
             }
             var newRow = table.insertRow(rowIndex);
-
             for (var i = 0, len = row.cells.length; i < len; i++) {
-                // 调整cell个数
                 if (row.cells[i].rowSpan > 1) {
                     len -= row.cells[i].rowSpan - 1;
                 }
                 var newCell = newRow.insertCell(i);
-                // copy colspan
                 if (offset === 1 && row.cells[i].colSpan > 1) {
                     newCell.colSpan = row.cells[i].colSpan;
                 }
                 newCell.innerHTML = K.IE ? '' : '<br />';
             }
-            // 调整rowspan
             for (var j = rowIndex; j >= 0; j--) {
                 var cells = table.rows[j].cells;
                 if (cells.length > i) {
@@ -10249,19 +9861,17 @@ KindEditor.plugin('table', function (K) {
             var table = self.plugin.getSelectedTable()[0],
                 row = self.plugin.getSelectedRow()[0],
                 cell = self.plugin.getSelectedCell()[0],
-                rowIndex = row.rowIndex, // 当前行的index
-                nextRowIndex = rowIndex + cell.rowSpan, // 下一行的index
-                nextRow = table.rows[nextRowIndex]; // 下一行
-            // 最后一行不能合并
+                rowIndex = row.rowIndex,
+                nextRowIndex = rowIndex + cell.rowSpan,
+                nextRow = table.rows[nextRowIndex];
             if (table.rows.length <= nextRowIndex) {
                 return;
             }
-            var cellIndex = cell.cellIndex; // 下一行单元格的index
+            var cellIndex = cell.cellIndex;
             if (nextRow.cells.length <= cellIndex) {
                 return;
             }
-            var nextCell = nextRow.cells[cellIndex]; // 下一行单元格
-            // 上下行的colspan不一致时不能合并
+            var nextCell = nextRow.cells[cellIndex];
             if (cell.colSpan !== nextCell.colSpan) {
                 return;
             }
@@ -10275,15 +9885,13 @@ KindEditor.plugin('table', function (K) {
             var table = self.plugin.getSelectedTable()[0],
                 row = self.plugin.getSelectedRow()[0],
                 cell = self.plugin.getSelectedCell()[0],
-                rowIndex = row.rowIndex, // 当前行的index
+                rowIndex = row.rowIndex,
                 cellIndex = cell.cellIndex,
                 nextCellIndex = cellIndex + 1;
-            // 最后一列不能合并
             if (row.cells.length <= nextCellIndex) {
                 return;
             }
             var nextCell = row.cells[nextCellIndex];
-            // 左右列的rowspan不一致时不能合并
             if (cell.rowSpan !== nextCell.rowSpan) {
                 return;
             }
@@ -10298,7 +9906,6 @@ KindEditor.plugin('table', function (K) {
                 row = self.plugin.getSelectedRow()[0],
                 cell = self.plugin.getSelectedCell()[0],
                 rowIndex = row.rowIndex;
-            // 不是可分割单元格
             if (cell.rowSpan === 1) {
                 return;
             }
@@ -10310,7 +9917,6 @@ KindEditor.plugin('table', function (K) {
                     newCell.colSpan = cell.colSpan;
                 }
                 newCell.innerHTML = K.IE ? '' : '<br />';
-                // 调整下一行的单元格index
                 cellIndex = _getCellIndex(table, newRow, newCell);
             }
             K(cell).removeAttr('rowSpan');
@@ -10323,7 +9929,6 @@ KindEditor.plugin('table', function (K) {
                 row = self.plugin.getSelectedRow()[0],
                 cell = self.plugin.getSelectedCell()[0],
                 cellIndex = cell.cellIndex;
-            // 不是可分割单元格
             if (cell.colSpan === 1) {
                 return;
             }
@@ -10355,7 +9960,6 @@ KindEditor.plugin('table', function (K) {
                 } else {
                     newRow.deleteCell(index);
                 }
-                // 跳过不需要删除的行
                 if (newCell.rowSpan > 1) {
                     i += newCell.rowSpan - 1;
                 }
@@ -10374,7 +9978,6 @@ KindEditor.plugin('table', function (K) {
                 row = self.plugin.getSelectedRow()[0],
                 cell = self.plugin.getSelectedCell()[0],
                 rowIndex = row.rowIndex;
-            // 从下到上删除
             for (var i = cell.rowSpan - 1; i >= 0; i--) {
                 table.deleteRow(rowIndex + i);
             }
@@ -10390,6 +9993,7 @@ KindEditor.plugin('table', function (K) {
     };
     self.clickToolbar(name, self.plugin.table.prop);
 });
+
 /*******************************************************************************
  * KindEditor - WYSIWYG HTML Editor for Internet
  * Copyright (C) 2006-2011 kindsoft.net
@@ -10398,7 +10002,6 @@ KindEditor.plugin('table', function (K) {
  * @site http://www.kindsoft.net/
  * @licence http://www.kindsoft.net/license.php
  *******************************************************************************/
-
 KindEditor.plugin('template', function (K) {
     var self = this, name = 'template', lang = self.lang(name + '.'),
         htmlPath = self.pluginsPath + name + '/html/';
@@ -10411,7 +10014,6 @@ KindEditor.plugin('template', function (K) {
         var lang = self.lang(name + '.'),
             arr = ['<div style="padding:10px 20px;">',
                 '<div class="ke-header">',
-                // left start
                 '<div class="ke-left">',
                 lang.selectTemplate + ' <select>'];
         K.each(lang.fileList, function (key, val) {
@@ -10419,7 +10021,6 @@ KindEditor.plugin('template', function (K) {
         });
         html = [arr.join(''),
             '</select></div>',
-            // right start
             '<div class="ke-right">',
             '<input type="checkbox" id="keReplaceFlag" name="replaceFlag" value="1" /> <label for="keReplaceFlag">' + lang.replaceContent + '</label>',
             '</div>',
@@ -10450,6 +10051,7 @@ KindEditor.plugin('template', function (K) {
         });
     });
 });
+
 /*******************************************************************************
  * KindEditor - WYSIWYG HTML Editor for Internet
  * Copyright (C) 2006-2011 kindsoft.net
@@ -10458,7 +10060,6 @@ KindEditor.plugin('template', function (K) {
  * @site http://www.kindsoft.net/
  * @licence http://www.kindsoft.net/license.php
  *******************************************************************************/
-
 KindEditor.plugin('wordpaste', function (K) {
     var self = this, name = 'wordpaste';
     self.clickToolbar(name, function () {
@@ -10500,4 +10101,36 @@ KindEditor.plugin('wordpaste', function (K) {
         }
         iframe[0].contentWindow.focus();
     });
+});
+
+
+KindEditor.plugin('fixtoolbar', function (K) {
+    var self = this;
+    if (!self.fixToolBar) {
+        return;
+    }
+
+    function init() {
+        var toolbar = K('.ke-toolbar');
+        var originY = toolbar.pos().y;
+        K(window).bind('scroll', function () {
+            if (toolbar.css('position') == 'fixed') {
+                if (document.body.scrollTop - originY < 0) {
+                    toolbar.css('position', 'static');
+                    toolbar.css('top', 'auto');
+                }
+            } else {
+                if (toolbar.pos().y - document.body.scrollTop < 0) {
+                    toolbar.css('position', 'fixed');
+                    toolbar.css('top', 0);
+                }
+            }
+        });
+    }
+
+    if (self.isCreated) {
+        init();
+    } else {
+        self.afterCreate(init);
+    }
 });

@@ -5,7 +5,6 @@
     background-color: #FFF;
     overflow: hidden;
 }
-
 /* toolbar */
 .ke-container-simple .ke-toolbar {
     border-bottom: 1px solid #CCC;
@@ -13,7 +12,6 @@
     padding: 2px 5px;
     overflow: hidden;
 }
-
 .ke-container-simple .ke-toolbar .ke-outline {
     border: 1px solid #FFF;
     background-color: transparent;
@@ -24,11 +22,9 @@
     overflow: hidden;
     cursor: pointer;
 }
-
 .ke-container-simple .ke-toolbar .ke-on {
     border: 1px solid #5690D2;
 }
-
 .ke-container-simple .ke-toolbar .ke-selected {
     border: 1px solid #5690D2;
     background-color: #E9EFF6;
@@ -37,7 +33,6 @@
 .ke-container-simple .ke-toolbar .ke-disabled {
     cursor: default;
 }
-
 /* statusbar */
 .ke-container-simple .ke-statusbar {
     position: relative;
@@ -50,7 +45,6 @@
     text-align: center;
     cursor: s-resize;
 }
-
 /* menu */
 .ke-menu-simple {
     border: 1px solid #A0A0A0;
@@ -62,7 +56,6 @@
     text-align: left;
     overflow: hidden;
 }
-
 .ke-menu-simple .ke-menu-item {
     border: 1px solid #FFF;
     background-color: #FFF;
@@ -71,12 +64,10 @@
     overflow: hidden;
     cursor: pointer;
 }
-
 .ke-menu-simple .ke-menu-item-on {
     border: 1px solid #5690D2;
     background-color: #FFF;
 }
-
 /* colorpicker */
 .ke-colorpicker-simple {
     border: 1px solid #A0A0A0;
@@ -84,7 +75,6 @@
     color: #222222;
     padding: 2px;
 }
-
 .ke-colorpicker-simple .ke-colorpicker-cell {
     font-size: 0;
     line-height: 0;
@@ -93,7 +83,6 @@
     margin: 3px;
     padding: 0;
 }
-
 .ke-colorpicker-simple .ke-colorpicker-cell-top {
     font-family: "sans serif", tahoma, verdana, helvetica;
     font-size: 12px;
@@ -104,11 +93,9 @@
     padding: 0;
     text-align: center;
 }
-
 .ke-colorpicker-simple .ke-colorpicker-cell-on {
     border: 1px solid #5690D2;
 }
-
 .ke-colorpicker-simple .ke-colorpicker-cell-selected {
     border: 1px solid #2446AB;
 }

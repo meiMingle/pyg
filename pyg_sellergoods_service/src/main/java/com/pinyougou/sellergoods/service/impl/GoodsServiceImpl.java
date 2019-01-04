@@ -3,11 +3,14 @@ package com.pinyougou.sellergoods.service.impl;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.pinyougou.mapper.TbGoodsDescMapper;
 import com.pinyougou.mapper.TbGoodsMapper;
 import com.pinyougou.pojo.TbGoods;
+import com.pinyougou.pojo.TbGoodsDesc;
 import com.pinyougou.pojo.TbGoodsExample;
 import com.pinyougou.pojo.TbGoodsExample.Criteria;
 import com.pinyougou.sellergoods.service.GoodsService;
+import com.pinyougou.vo.Goods;
 import entity.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +28,8 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Autowired
     private TbGoodsMapper goodsMapper;
+    @Autowired
+    private TbGoodsDescMapper tbGoodsDescMapper;
 
     /**
      * 查询全部
@@ -48,8 +53,16 @@ public class GoodsServiceImpl implements GoodsService {
      * 增加
      */
     @Override
-    public void add(TbGoods goods) {
-        goodsMapper.insert(goods);
+    public void add(Goods goods) {
+
+        //保存tbGoods，返回id
+        TbGoods tbGoods = goods.getGoods();
+        goodsMapper.insert(tbGoods);
+        //保存goodsDesc
+        TbGoodsDesc tbGoodsDesc = goods.getGoodsDesc();
+        tbGoodsDesc.setGoodsId(tbGoods.getId());
+        tbGoodsDescMapper.insert(tbGoodsDesc);
+
     }
 
 
