@@ -5,10 +5,10 @@
        xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
                             http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
-       http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd
-">
+                            http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
     <security:http pattern="/shoplogin.html" security="none"></security:http>
+    <security:http pattern="/favicon.ico" security="none"></security:http>
     <security:http pattern="/register.html" security="none"></security:http>
     <security:http pattern="/css/**" security="none"></security:http>
     <security:http pattern="/img/**" security="none"></security:http>

@@ -52,4 +52,14 @@ app.controller("baseController", function ($scope) {
         return value;
     };
 
+
+    $scope.searchObjectFromList = function (list, key, value) {
+        for (var i = 0; i < list.length; i++) {
+            if (list[i][key] == value) {
+                return list[i];
+            }
+        }
+        return null;
+    }
+
 });

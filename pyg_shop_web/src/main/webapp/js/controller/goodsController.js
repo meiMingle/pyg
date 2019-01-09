@@ -1,5 +1,5 @@
 //控制层
-app.controller('goodsController', function ($scope, $controller, goodsService, itemCatService, typeTemplateService) {
+app.controller('goodsController', function ($scope, $controller, goodsService, itemCatService, typeTemplateService, uploadService, specificationService) {
 
     $controller('baseController', {$scope: $scope});//继承
 
@@ -83,17 +83,30 @@ app.controller('goodsController', function ($scope, $controller, goodsService, i
 
 
     $scope.itemCat1List = [];
-    /*
+    /*entity数据结构
         $scope.entity={
-            good:{
+            goods:{
                 category1Id:1,
                 category2Id:2,
                 category2Id:3,
                 typeTemplateId:
                 brandId
             },
-            goodsDesc:{},
-            itemList:[]
+            goodsDesc:{
+                itemImages:[] ,图片组
+                customAttributeItems:[], 扩展属性数组
+                specificationItems:[
+                    {attributeName:
+                    attributeValue:[]
+                    }
+                ]  选中的规格及规格选项
+
+            },
+            itemList:[
+                {spec:{"机身内存":"16G","网络":"联通3G"},price:"255",stockCount:"99999",status:"1",isDefault:"1"},
+                {spec:{"机身内存":"16G","网络":"联通4G"},price:"255",stockCount:"99999",status:"1",isDefault:"1"},
+                {spec:{"机身内存":"16G","网络":"移动3G"},price:"255",stockCount:"99999",status:"1",isDefault:"1"}
+            ]
         }
     */
     //查询一级分类列表
@@ -140,7 +153,11 @@ app.controller('goodsController', function ($scope, $controller, goodsService, i
     });
 
     //查询最终分类对应模板id
-    $scope.entity = {goods: {}, goodsDesc: {}, itemList: []};
+    $scope.entity = {
+        goods: {},
+        goodsDesc: {itemImages: [], customAttributeItems: [], specificationItems: []},
+        itemList: [{spec: {}, price: "255", stockCount: "99999", status: "1", isDefault: "1"}]
+    };
     $scope.$watch("entity.goods.category3Id", function (newValue, oldValue) {
         if (undefined != newValue) {
             itemCatService.findOne(newValue).success(function (res) {
@@ -149,6 +166,7 @@ app.controller('goodsController', function ($scope, $controller, goodsService, i
                 $scope.brandList = [];
 
             })
+
         }
     });
 
@@ -159,7 +177,157 @@ app.controller('goodsController', function ($scope, $controller, goodsService, i
         if (undefined != newValue) {
             typeTemplateService.findOne(newValue).success(function (res) {
                 $scope.brandList = JSON.parse(res.brandIds);
+                $scope.entity.goodsDesc.customAttributeItems = JSON.parse(res.customAttributeItems);
+            });
+
+
+            /*
+                        $scope.specList:[
+                            {id:1,
+                            text:"网络"
+                            optionList:[
+                                {id:1,optionName:"3G"},
+                                {id:1,optionName:"3G"},
+                                {id:1,optionName:"3G"},
+
+                            ]
+
+
+                            },
+                            {}
+
+
+                        ]
+            */
+
+            //根据模板id查询对应的规格及规格选项
+            $scope.specList = [{optionList: []}];
+            specificationService.findSpecList(newValue).success(function (res) {
+                $scope.specList = res;
             })
         }
-    })
+    });
+
+    $scope.image = {
+        color: '',
+        url: 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='/*空黑白透明图片*/
+    };
+    //上传文件的方法
+    $scope.uploadFile = function () {
+
+        uploadService.uploadFile().success(function (res) {
+            if (res.success) {
+                $scope.image.url = res.message;
+            } else {
+                alert(res.message);
+            }
+        })
+
+    };
+    //将上传的图片保存到图片列表中
+    $scope.addImageToImages = function () {
+        $scope.entity.goodsDesc.itemImages.push($scope.image);
+        this.imageInit();
+    };
+
+
+    /*图片上传并保存后的初始化*/
+    $scope.imageInit = function () {
+        $scope.image = undefined;//切断image的双向绑定
+        $scope.image = {//初始化image
+            color: '',
+            url: 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='
+        };
+        /*初始化清空图片上传的input内容*/
+        var obj = document.getElementById('file');
+        obj.outerHTML = obj.outerHTML;
+    };
+
+
+    //将上传的图片保存到图片列表中
+    $scope.removeImageFromImages = function (index) {
+        $scope.entity.goodsDesc.itemImages.splice(index, 1);
+    };
+
+
+    //操作规格
+    $scope.selectSpecOptins = function ($event, specName, optionName) {
+        //从entity.goodsDesc.specificationItems中根据specName查找对应规格对象
+
+
+        var specObject = $scope.searchObjectFromList($scope.entity.goodsDesc.specificationItems, 'attributeName', specName);
+
+        //判断是否获取到对象
+        if (null != specObject) {
+            //获取到规格对象
+            //判断选中状态，
+            if ($event.target.checked) {
+                //选中，放入attributeValue数组中；
+                specObject.attributeValue.push(optionName);
+            } else {
+                //未选中，将数据从attributeValue数组中移除
+                var attrIndex = specObject.attributeValue.indexOf(optionName);
+                specObject.attributeValue.splice(attrIndex, 1);
+
+                // 判断attributeValue数组是否有数据
+                if (specObject.attributeValue.length <= 0) {
+                    //如果没有则将规格从entity.goodsDesc.specificationItems中移除
+                    var objIndex = $scope.entity.goodsDesc.specificationItems.indexOf(specObject);
+                    $scope.entity.goodsDesc.specificationItems.splice(objIndex, 1);
+
+                }
+
+
+            }
+
+
+        } else {//没有获取到规格对象，肯定是添加操作
+            specObject = {attributeName: '', attributeValue: []};
+            specObject.attributeName = specName;
+            specObject.attributeValue.push(optionName);
+            //定义规格对象，将规格对象添加到 $scope.entity.goodsDesc.specificationItems中保存
+            $scope.entity.goodsDesc.specificationItems.push(specObject);
+        }
+
+        //alert(JSON.stringify($scope.entity.goodsDesc.specificationItems));
+
+    };
+
+
+    $scope.createItemList = function () {
+
+        $scope.entity.itemList = [{spec: {}, price: "255", stockCount: "99999", status: "1", isDefault: "1"}];
+        for (var i = 0; i < $scope.entity.goodsDesc.specificationItems.length; i++) {
+            var spec = $scope.entity.goodsDesc.specificationItems[i];
+
+            //alert(JSON.stringify(spec.attributeValue));
+            $scope.entity.itemList = $scope.addCulom($scope.entity.itemList, spec);
+
+        }
+
+    };
+
+    $scope.addCulom = function (itemList, spec) {
+
+        var newList = [];
+
+
+        //循环itemList，将规格和和库存合并
+        for (var i = 0; i < itemList.length; i++) {
+            var item = itemList[i];
+
+            //合并结果，遍历规格选项数组
+            for (var j = 0; j < spec.attributeValue.length; j++) {
+                var newItem = JSON.parse(JSON.stringify(item));
+                newItem.spec[spec.attributeName] = spec.attributeValue[j];
+                newList.push(newItem);
+            }
+
+        }
+
+        //alert(JSON.stringify(newList));
+        return newList;
+
+    };
+
 });	
