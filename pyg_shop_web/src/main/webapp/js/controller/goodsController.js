@@ -91,6 +91,7 @@ app.controller('goodsController', function ($scope, $controller, goodsService, i
                 category2Id:3,
                 typeTemplateId:
                 brandId
+                isEnableSpec：
             },
             goodsDesc:{
                 itemImages:[] ,图片组
@@ -103,9 +104,9 @@ app.controller('goodsController', function ($scope, $controller, goodsService, i
 
             },
             itemList:[
-                {spec:{"机身内存":"16G","网络":"联通3G"},price:"255",stockCount:"99999",status:"1",isDefault:"1"},
-                {spec:{"机身内存":"16G","网络":"联通4G"},price:"255",stockCount:"99999",status:"1",isDefault:"1"},
-                {spec:{"机身内存":"16G","网络":"移动3G"},price:"255",stockCount:"99999",status:"1",isDefault:"1"}
+                {spec:{"机身内存":"16G","网络":"联通3G"},price:"255",num:"99999",status:"1",isDefault:"1"},
+                {spec:{"机身内存":"16G","网络":"联通4G"},price:"255",num:"99999",status:"1",isDefault:"1"},
+                {spec:{"机身内存":"16G","网络":"移动3G"},price:"255",num:"99999",status:"1",isDefault:"1"}
             ]
         }
     */
@@ -156,7 +157,7 @@ app.controller('goodsController', function ($scope, $controller, goodsService, i
     $scope.entity = {
         goods: {},
         goodsDesc: {itemImages: [], customAttributeItems: [], specificationItems: []},
-        itemList: [{spec: {}, price: "255", stockCount: "99999", status: "1", isDefault: "1"}]
+        itemList: [{spec: {}, price: "255", num: "99999", status: "1", isDefault: "1"}]
     };
     $scope.$watch("entity.goods.category3Id", function (newValue, oldValue) {
         if (undefined != newValue) {
@@ -296,7 +297,7 @@ app.controller('goodsController', function ($scope, $controller, goodsService, i
 
     $scope.createItemList = function () {
 
-        $scope.entity.itemList = [{spec: {}, price: "255", stockCount: "99999", status: "1", isDefault: "1"}];
+        $scope.entity.itemList = [{spec: {}, price: "255", num: "99999", status: "1", isDefault: "1"}];
         for (var i = 0; i < $scope.entity.goodsDesc.specificationItems.length; i++) {
             var spec = $scope.entity.goodsDesc.specificationItems[i];
 
@@ -330,4 +331,12 @@ app.controller('goodsController', function ($scope, $controller, goodsService, i
 
     };
 
-});	
+    //是否启用规格切换时，清空规格/规格选项(entity.goosDesc.specficationItems)和生成的库存列表(entity.itemList)
+    $scope.restSpecAndItem = function () {
+
+        $scope.entity.goodsDesc.specificationItems = [];
+        $scope.entity.itemList = [{spec: {}, price: "255", num: "99999", status: "1", isDefault: "1"}];
+
+    };
+
+});

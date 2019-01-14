@@ -209,12 +209,13 @@
                     <div class="row data-type">
                         <div class="col-md-2 title">是否启用规格</div>
                         <div class="col-md-10 data">
-                            <input type="checkbox">
+                            <input ng-click="restSpecAndItem()" ng-false-value="0" ng-model="entity.goods.isEnableSpec"
+                                   ng-true-value="1" type="checkbox">
                         </div>
                     </div>
                     <p>
 
-                    <div>
+                    <div ng-if="entity.goods.isEnableSpec==1">
 
                         <div class="row data-type">
 
@@ -253,13 +254,15 @@
                                         <input class="form-control" ng-model="item.price" placeholder="价格">
                                     </td>
                                     <td>
-                                        <input class="form-control" ng-model="item.stockCount" placeholder="库存数量">
+                                        <input class="form-control" ng-model="item.num" placeholder="库存数量">
                                     </td>
                                     <td>
-                                        <input ng-model="item.status" type="checkbox">
+                                        <input ng-false-value="0" ng-model="item.status" ng-true-value="1"
+                                               type="checkbox">
                                     </td>
                                     <td>
-                                        <input ng-model="item.isDefault" type="checkbox">
+                                        <input ng-false-value="0" ng-model="item.isDefault" ng-true-value="1"
+                                               type="checkbox">
                                     </td>
                                 </tr>
 

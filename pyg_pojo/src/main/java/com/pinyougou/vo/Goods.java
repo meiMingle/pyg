@@ -15,16 +15,16 @@ import java.util.List;
 public class Goods implements Serializable {
 
     List<TbItem> itemList;
-    private TbGoods Goods;
-    private TbGoodsDesc GoodsDesc;
+    private TbGoods tbGoods;
+    private TbGoodsDesc tbGoodsDesc;
 
     public Goods() {
     }
 
-    public Goods(List<TbItem> itemList, TbGoods goods, TbGoodsDesc goodsDesc) {
+    public Goods(List<TbItem> itemList, TbGoods tbGoods, TbGoodsDesc tbGoodsDesc) {
         this.itemList = itemList;
-        Goods = goods;
-        GoodsDesc = goodsDesc;
+        this.tbGoods = tbGoods;
+        this.tbGoodsDesc = tbGoodsDesc;
     }
 
     public List<TbItem> getItemList() {
@@ -35,19 +35,19 @@ public class Goods implements Serializable {
         this.itemList = itemList;
     }
 
-    public TbGoods getGoods() {
-        return Goods;
+    public TbGoods getTbGoods() {
+        return tbGoods;
     }
 
-    public void setGoods(TbGoods goods) {
-        Goods = goods;
+    public void setTbGoods(TbGoods tbGoods) {
+        this.tbGoods = tbGoods;
     }
 
-    public TbGoodsDesc getGoodsDesc() {
-        return GoodsDesc;
+    public TbGoodsDesc getTbGoodsDesc() {
+        return tbGoodsDesc;
     }
 
-    public void setGoodsDesc(TbGoodsDesc goodsDesc) {
-        GoodsDesc = goodsDesc;
+    public void setTbGoodsDesc(TbGoodsDesc tbGoodsDesc) {
+        this.tbGoodsDesc = tbGoodsDesc;
     }
 }

@@ -1,13 +1,16 @@
 package com.pinyougou.sellergoods.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.pinyougou.mapper.TbSpecificationMapper;
 import com.pinyougou.mapper.TbSpecificationOptionMapper;
+import com.pinyougou.mapper.TbTypeTemplateMapper;
 import com.pinyougou.pojo.TbSpecification;
 import com.pinyougou.pojo.TbSpecificationOption;
 import com.pinyougou.pojo.TbSpecificationOptionExample;
+import com.pinyougou.pojo.TbTypeTemplate;
 import com.pinyougou.sellergoods.service.SpecificationService;
 import com.pinyougou.vo.Specification;
 import entity.PageResult;
@@ -15,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -24,6 +28,9 @@ public class SpecificationServiceImpl implements SpecificationService {
     private TbSpecificationMapper tbSpecificationMapper;
     @Resource
     private TbSpecificationOptionMapper tbSpecificationOptionMapper;
+    @Resource
+    private TbTypeTemplateMapper tbTypeTemplateMapper;
+
 
     /*
      * @ Description  -  -    :  service层查询所有Specification
@@ -129,5 +136,31 @@ public class SpecificationServiceImpl implements SpecificationService {
             criteria.andSpecIdEqualTo(id);//注入查询条件
             tbSpecificationOptionMapper.deleteByExample(tbSpecificationOptionExample);
         }
+    }
+
+    @Override
+    public List<Map> findSpecList(Long typeTemplateId) {
+
+        //从模板表中查询规格列表
+        TbTypeTemplate tbTypeTemplate = tbTypeTemplateMapper.selectByPrimaryKey(typeTemplateId);
+        List<Map> specList = JSON.parseArray(tbTypeTemplate.getSpecIds(), Map.class);
+
+        //遍历规格列表
+        for (Map spec : specList) {
+
+
+            //获取规格id，从Interger转为Long
+            Long specId = ((Integer) spec.get("id")).longValue();
+
+            //根据规格id查询规格选项列表
+            TbSpecificationOptionExample tbSpecificationOptionExample = new TbSpecificationOptionExample();
+            TbSpecificationOptionExample.Criteria criteria = tbSpecificationOptionExample.createCriteria();
+            criteria.andSpecIdEqualTo(specId);
+            List<TbSpecificationOption> tbSpecificationOptions = tbSpecificationOptionMapper.selectByExample(tbSpecificationOptionExample);
+
+            //将规格选项列表封装到规格中
+            spec.put("optionList", tbSpecificationOptions);
+        }
+        return specList;
     }
 }

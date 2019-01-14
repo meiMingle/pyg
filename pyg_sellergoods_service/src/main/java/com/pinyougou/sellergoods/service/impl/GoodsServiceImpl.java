@@ -1,13 +1,11 @@
 package com.pinyougou.sellergoods.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.pinyougou.mapper.TbGoodsDescMapper;
-import com.pinyougou.mapper.TbGoodsMapper;
-import com.pinyougou.pojo.TbGoods;
-import com.pinyougou.pojo.TbGoodsDesc;
-import com.pinyougou.pojo.TbGoodsExample;
+import com.pinyougou.mapper.*;
+import com.pinyougou.pojo.*;
 import com.pinyougou.pojo.TbGoodsExample.Criteria;
 import com.pinyougou.sellergoods.service.GoodsService;
 import com.pinyougou.vo.Goods;
@@ -15,7 +13,9 @@ import entity.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 服务实现层
@@ -30,6 +30,16 @@ public class GoodsServiceImpl implements GoodsService {
     private TbGoodsMapper goodsMapper;
     @Autowired
     private TbGoodsDescMapper tbGoodsDescMapper;
+    @Autowired
+    private TbBrandMapper tbBrandMapper;
+    @Autowired
+    private TbItemMapper tbItemMapper;
+
+    @Autowired
+    private TbSellerMapper tbSellerMapper;
+    @Autowired
+    private TbItemCatMapper tbItemCatMapper;
+
 
     /**
      * 查询全部
@@ -55,14 +65,88 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public void add(Goods goods) {
 
-        //保存tbGoods，返回id
-        TbGoods tbGoods = goods.getGoods();
+        //1.保存tbGoods，返回id
+        TbGoods tbGoods = goods.getTbGoods();
         goodsMapper.insert(tbGoods);
-        //保存goodsDesc
-        TbGoodsDesc tbGoodsDesc = goods.getGoodsDesc();
+        //2.保存goodsDesc
+        TbGoodsDesc tbGoodsDesc = goods.getTbGoodsDesc();
         tbGoodsDesc.setGoodsId(tbGoods.getId());
         tbGoodsDescMapper.insert(tbGoodsDesc);
 
+        //3.保存库存
+        //3.1判断是否启用规格
+        //3.2是，按照实际库存表保存
+        //3.3否，默认保存一条库存数据
+
+        if ("1".equals(tbGoods.getIsEnableSpec())) {
+            for (TbItem tbItem : goods.getItemList()) {
+
+                //拼接并设置tbItem的title
+                Long brandId = goods.getTbGoods().getBrandId();
+                String brandName = tbBrandMapper.selectByPrimaryKey(brandId).getName();
+                String goodsName = goods.getTbGoods().getGoodsName();
+                String title = brandName;
+                Map<String, Object> specMap = JSON.parseObject(tbItem.getSpec());
+                for (String key : specMap.keySet()) {
+                    title += " " + specMap.get(key);
+                }
+                title += goodsName;
+                tbItem.setTitle(title);
+                //将goods里的值映射到tbItem
+                setItemValues(goods, tbItem);
+                //存入tbItem
+                tbItemMapper.insert(tbItem);
+
+            }
+
+
+        } else {
+
+
+            TbItem tbItem = new TbItem();
+            tbItem.setTitle(goods.getTbGoods().getGoodsName());//商品 SPU+规格描述串作为SKU 名称
+            tbItem.setPrice(goods.getTbGoods().getPrice());//价格
+            tbItem.setStatus("1");//状态
+            tbItem.setIsDefault("1");//是否默认
+            tbItem.setNum(99999);//库存数量
+            tbItem.setSpec("{}");
+            setItemValues(goods, tbItem);
+            tbItemMapper.insert(tbItem);
+
+        }
+    }
+
+
+    //
+    public TbItem setItemValues(Goods goods, TbItem tbItem) {
+
+
+        tbItem.setGoodsId(goods.getTbGoods().getId());//商品 SPU 编号
+        tbItem.setSellerId(goods.getTbGoods().getSellerId());//商家编号
+        tbItem.setCategoryid(goods.getTbGoods().getCategory3Id());//商品分类编号（3 级）
+        tbItem.setCreateTime(new Date());//创建日期
+        tbItem.setUpdateTime(new Date());//修改日期
+        //品牌名称
+        TbBrand brand =
+                tbBrandMapper.selectByPrimaryKey(goods.getTbGoods().getBrandId());
+        tbItem.setBrand(brand.getName());
+        //分类名称
+        TbItemCat tbItemCat =
+                tbItemCatMapper.selectByPrimaryKey(goods.getTbGoods().getCategory3Id());
+        tbItem.setCategory(tbItemCat.getName());
+        //商家名称
+        TbSeller seller =
+                tbSellerMapper.selectByPrimaryKey(goods.getTbGoods().getSellerId());
+        tbItem.setSeller(seller.getNickName());
+        //图片地址（取 spu 的第一个图片）
+        List<Map> imageList = JSON.parseArray(goods.getTbGoodsDesc().getItemImages(),
+                Map.class);
+        if (imageList.size() > 0) {
+            tbItem.setImage((String) imageList.get(0).get("url"));
+        }
+
+
+        return tbItem;
     }
 
 

@@ -1,7 +1,7 @@
 import org.junit.Test;
 import util.BCryptUtil;
 
-public class UtilTest {
+public class BCryptUtilTest {
     @Test
     public void test1() {
         String encodedStr = BCryptUtil.encode("shop");
