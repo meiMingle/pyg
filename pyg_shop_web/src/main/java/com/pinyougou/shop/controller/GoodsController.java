@@ -44,8 +44,11 @@ public class GoodsController {
      */
     @RequestMapping("/findPage/{page}/{rows}")
     public PageResult findPage(@PathVariable("page") int page, @PathVariable("rows") int rows) {
-        return goodsService.
-                findPage(page, rows);
+        TbGoods tbGoods = new TbGoods();
+        String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
+        tbGoods.setSellerId(sellerId);
+
+        return goodsService.findPage(tbGoods, page, rows);
     }
 
     /**
@@ -60,7 +63,7 @@ public class GoodsController {
 
             //将商品和当前商家绑定
             String name = SecurityContextHolder.getContext().getAuthentication().getName();
-            goods.getGoods().setSellerId(name);
+            goods.getTbGoods().setSellerId(name);
             goodsService.add(goods);
             return new Result(true, "增加成功");
         } catch (Exception e) {
@@ -124,7 +127,33 @@ public class GoodsController {
      */
     @RequestMapping("/search/{page}/{rows}")
     public PageResult search(@RequestBody TbGoods goods, @PathVariable("page") int page, @PathVariable("rows") int rows) {
+        String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
+        goods.setSellerId(sellerId);
+
         return goodsService.findPage(goods, page, rows);
+    }
+
+    @RequestMapping("/marketGoods/{selectIds}/{ismarketable}")
+    public Result marketGoods(@PathVariable("selectIds") Long[] selectIds, @PathVariable("ismarketable") String ismarketable) {
+
+        String message = "";
+
+        switch (ismarketable) {
+            case "1":
+                message = "上架";
+                break;
+            case "0":
+                message = "下架";
+                break;
+        }
+        try {
+            goodsService.marketGoods(selectIds, ismarketable);
+            return new Result(true, message + "成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, message + "失败");
+        }
+
     }
 
 }

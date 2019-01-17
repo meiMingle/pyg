@@ -14,12 +14,28 @@ app.controller('goodsController', function ($scope, $controller, goodsService, i
 
     //分页
     $scope.findPage = function (page, rows) {
-        goodsService.findPage(page, rows).success(
-            function (response) {
-                $scope.list = response.rows;
-                $scope.paginationConf.totalItems = response.total;//更新总记录数
-            }
-        );
+
+        if ($scope.searchEntity.auditStatus == '1') {
+            //是‘1’，上下架search
+            goodsService.search(page, rows, $scope.searchEntity).success(
+                function (response) {
+                    $scope.list = response.rows;
+                    $scope.paginationConf.totalItems = response.total;//更新总记录数
+                }
+            );
+
+
+        } else {
+            //不是‘1’，商品管理findPage
+
+            goodsService.findPage(page, rows).success(
+                function (response) {
+                    $scope.list = response.rows;
+                    $scope.paginationConf.totalItems = response.total;//更新总记录数
+                }
+            );
+
+        }
     };
 
     //查询实体
@@ -69,7 +85,7 @@ app.controller('goodsController', function ($scope, $controller, goodsService, i
         );
     };
 
-    $scope.searchEntity = {};//定义搜索对象
+    $scope.searchEntity = {auditStatus: undefined};//定义搜索对象
 
     //搜索
     $scope.search = function (page, rows) {
@@ -336,6 +352,36 @@ app.controller('goodsController', function ($scope, $controller, goodsService, i
 
         $scope.entity.goodsDesc.specificationItems = [];
         $scope.entity.itemList = [{spec: {}, price: "255", num: "99999", status: "1", isDefault: "1"}];
+
+    };
+
+    $scope.status = ['未审核', '审核通过', '审核被驳回', '关闭'];
+    $scope.itemCatAllList = [];
+
+    $scope.findItemCatList = function () {
+
+        itemCatService.findAll().success(function (res) {
+            for (var i = 0; i < res.length; i++) {
+                $scope.itemCatAllList[res[i].id] = res[i].name;//将返回的分类列表，以id为下标存入itemCatAllList数组
+
+            }
+        })
+
+    };
+
+    //更新商品上下架状态的方法
+    $scope.marketGoods = function (ismarketable) {
+        goodsService.marketGoods($scope.selectIds, ismarketable).success(function (res) {
+            if (res.success) {
+                $scope.reloadList();
+                $scope.selectIds = [];
+                alert(res.message);
+
+            } else {
+                alert(res.message);
+            }
+
+        })
 
     };
 

@@ -17,6 +17,11 @@ app.service('specificationService', function ($http) {
 
     this.delete = function (selectIds) {
         return $http.get("../specification/delete/" + selectIds)
+    };
+
+    this.findSpecList = function (typeTemplateId) {
+
+        return $http.get("../specification/findSpecList/" + typeTemplateId)
     }
 
 });

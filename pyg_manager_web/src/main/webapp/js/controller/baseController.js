@@ -1,14 +1,24 @@
 app.controller('baseController', function ($scope) {
 
     // 分页控件配置
+    $scope.reload = true;//定义是否允许重新加载的状态变量
     // currentPage：当前页；totalItems：总记录数；itemsPerPage：每页记录数；perPageOptions：分页选项；onChange：当页码变更后自动触发的方法
     $scope.paginationConf = {
         currentPage: 1,
         totalItems: 10,
-        itemsPerPage: 5,
+        itemsPerPage: 10,
         perPageOptions: [10, 20, 30, 40, 50],
         onChange: function () {
+            if (!$scope.reload) {//判断是否允许重新加载
+                return;
+            }
+
             $scope.reloadList();//重新加载
+
+            $scope.reload = false;//加载之后设置不允许重新加载，防止二次触发请求
+            setTimeout(function () {
+                $scope.reload = true;
+            }, 200);//延时200恢复允许重新加载
         }
     };
 
@@ -29,6 +39,8 @@ app.controller('baseController', function ($scope) {
             var i = $scope.selectIds.indexOf(id);
             $scope.selectIds.splice(i, 1);
         }
+
+        //alert($scope.selectIds)
     };
 
     //全选复选框

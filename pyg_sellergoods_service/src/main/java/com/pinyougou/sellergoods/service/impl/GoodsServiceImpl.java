@@ -27,7 +27,7 @@ import java.util.Map;
 public class GoodsServiceImpl implements GoodsService {
 
     @Autowired
-    private TbGoodsMapper goodsMapper;
+    private TbGoodsMapper tbGoodsMapper;
     @Autowired
     private TbGoodsDescMapper tbGoodsDescMapper;
     @Autowired
@@ -46,7 +46,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public List<TbGoods> findAll() {
-        return goodsMapper.selectByExample(null);
+        return tbGoodsMapper.selectByExample(null);
     }
 
     /**
@@ -55,7 +55,13 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public PageResult findPage(int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        Page<TbGoods> page = (Page<TbGoods>) goodsMapper.selectByExample(null);
+
+
+        //查询所有未审核的商品
+        TbGoodsExample tbGoodsExample = new TbGoodsExample();
+        Criteria criteria = tbGoodsExample.createCriteria();
+        criteria.andAuditStatusEqualTo("0");
+        Page<TbGoods> page = (Page<TbGoods>) tbGoodsMapper.selectByExample(tbGoodsExample);
         return new PageResult(page.getTotal(), page.getResult());
     }
 
@@ -67,7 +73,8 @@ public class GoodsServiceImpl implements GoodsService {
 
         //1.保存tbGoods，返回id
         TbGoods tbGoods = goods.getTbGoods();
-        goodsMapper.insert(tbGoods);
+        tbGoods.setAuditStatus("0");//默认审核状态，未审核
+        tbGoodsMapper.insert(tbGoods);
         //2.保存goodsDesc
         TbGoodsDesc tbGoodsDesc = goods.getTbGoodsDesc();
         tbGoodsDesc.setGoodsId(tbGoods.getId());
@@ -155,7 +162,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public void update(TbGoods goods) {
-        goodsMapper.updateByPrimaryKey(goods);
+        tbGoodsMapper.updateByPrimaryKey(goods);
     }
 
     /**
@@ -166,7 +173,7 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public TbGoods findOne(Long id) {
-        return goodsMapper.selectByPrimaryKey(id);
+        return tbGoodsMapper.selectByPrimaryKey(id);
     }
 
     /**
@@ -175,7 +182,7 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public void delete(Long[] ids) {
         for (Long id : ids) {
-            goodsMapper.deleteByPrimaryKey(id);
+            tbGoodsMapper.deleteByPrimaryKey(id);
         }
     }
 
@@ -189,13 +196,13 @@ public class GoodsServiceImpl implements GoodsService {
 
         if (goods != null) {
             if (goods.getSellerId() != null && goods.getSellerId().length() > 0) {
-                criteria.andSellerIdLike("%" + goods.getSellerId() + "%");
+                criteria.andSellerIdEqualTo(goods.getSellerId());
             }
             if (goods.getGoodsName() != null && goods.getGoodsName().length() > 0) {
                 criteria.andGoodsNameLike("%" + goods.getGoodsName() + "%");
             }
             if (goods.getAuditStatus() != null && goods.getAuditStatus().length() > 0) {
-                criteria.andAuditStatusLike("%" + goods.getAuditStatus() + "%");
+                criteria.andAuditStatusEqualTo(goods.getAuditStatus());
             }
             if (goods.getIsMarketable() != null && goods.getIsMarketable().length() > 0) {
                 criteria.andIsMarketableLike("%" + goods.getIsMarketable() + "%");
@@ -215,8 +222,36 @@ public class GoodsServiceImpl implements GoodsService {
 
         }
 
-        Page<TbGoods> page = (Page<TbGoods>) goodsMapper.selectByExample(example);
+        Page<TbGoods> page = (Page<TbGoods>) tbGoodsMapper.selectByExample(example);
         return new PageResult(page.getTotal(), page.getResult());
     }
+
+    @Override
+    public void goodsAudit(Long[] selectIds, String auditStatus) {
+        for (Long goodsId : selectIds) {
+            TbGoods tbGoods = tbGoodsMapper.selectByPrimaryKey(goodsId);
+            tbGoods.setAuditStatus(auditStatus);
+            tbGoodsMapper.updateByPrimaryKey(tbGoods);
+        }
+    }
+
+    @Override
+    public void deleteGoods(Long[] selectIds) {
+        for (Long goodsId : selectIds) {
+            TbGoods tbGoods = tbGoodsMapper.selectByPrimaryKey(goodsId);
+            tbGoods.setIsDelete("1");
+            tbGoodsMapper.updateByPrimaryKey(tbGoods);
+        }
+    }
+
+    @Override
+    public void marketGoods(Long[] selectIds, String ismarketable) {
+        for (Long selectId : selectIds) {
+            TbGoods tbGoods = tbGoodsMapper.selectByPrimaryKey(selectId);
+            tbGoods.setIsMarketable(ismarketable);
+            tbGoodsMapper.updateByPrimaryKey(tbGoods);
+        }
+    }
+
 
 }

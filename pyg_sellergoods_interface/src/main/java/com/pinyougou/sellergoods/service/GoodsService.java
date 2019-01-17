@@ -66,4 +66,9 @@ public interface GoodsService {
      */
     PageResult findPage(TbGoods goods, int pageNum, int pageSize);
 
+    void goodsAudit(Long[] selectIds, String auditStatus);
+
+    void deleteGoods(Long[] selectIds);
+
+    void marketGoods(Long[] selectIds, String ismarketable);
 }

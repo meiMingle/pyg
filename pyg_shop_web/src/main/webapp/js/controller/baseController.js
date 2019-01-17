@@ -5,6 +5,8 @@ app.controller("baseController", function ($scope) {
         $scope.findPage($scope.paginationConf.currentPage,
             $scope.paginationConf.itemsPerPage);
     };
+
+    $scope.reload = true;//定义是否允许重新加载的状态变量
     // 分页控件配置
     $scope.paginationConf = {
         currentPage: 1,
@@ -12,9 +14,19 @@ app.controller("baseController", function ($scope) {
         itemsPerPage: 10,
         perPageOptions: [10, 20, 30, 40, 50],
         onChange: function () {
+            if (!$scope.reload) {//判断是否允许重新加载
+                return;
+            }
+
             $scope.reloadList();// 重新加载
+
+            $scope.reload = false; ////加载之后设置不允许重新加载，防止二次触发请求
+            setTimeout(function () {
+                $scope.reload = true;//延时200恢复允许重新加载
+            }, 250);
         }
     };
+
 
     // 初始化一个id数组
     $scope.selectIds = [];

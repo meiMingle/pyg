@@ -15,9 +15,24 @@
     <script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
     <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
 
+    <!---->
+    <link href="../plugins/angularjs/pagination.css" rel="stylesheet">
+    <script src="../plugins/angularjs/angular.min.js"></script>
+    <script src="../plugins/angularjs/pagination.js"></script>
+    <!---->
+    <script src="../js/base_pagination.js"></script>
+    <script src="../js/service/uploadService.js"></script>
+    <script src="../js/service/specificationService.js"></script>
+    <script src="../js/service/typeTemplateService.js"></script>
+    <script src="../js/service/itemCatService.js"></script>
+    <script src="../js/service/goodsService.js"></script>
+    <script src="../js/controller/baseController.js"></script>
+    <script src="../js/controller/goodsController.js"></script>
+
 </head>
 
-<body class="hold-transition skin-red sidebar-mini">
+<body class="hold-transition skin-red sidebar-mini" ng-app="pyg" ng-controller="goodsController"
+      ng-init="findItemCatList();searchEntity = {auditStatus:undefined};">
 <!-- .box-body -->
 
 <div class="box-header with-border">
@@ -33,7 +48,9 @@
         <div class="pull-left">
             <div class="form-group form-inline">
                 <div class="btn-group">
-                    <button class="btn btn-default" title="新建" type="button"><i class="fa fa-file-o"></i> 新建</button>
+                    <button class="btn btn-default" onclick="location.href='goods_edit.html'" title="新建" type="button">
+                        <i class="fa fa-file-o"></i> 新建
+                    </button>
                     <button class="btn btn-default" title="删除" type="button"><i class="fa fa-trash-o"></i> 删除</button>
                     <button class="btn btn-default" title="提交审核" type="button"><i class="fa fa-check"></i> 提交审核</button>
                     <button class="btn btn-default" onclick='confirm("你确认要屏蔽吗？")' title="屏蔽" type="button"><i
@@ -78,35 +95,47 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
+            <tr ng-repeat="entity in list">
                 <td><input type="checkbox"></td>
-                <td>1</td>
-                <td>小米6S手机</td>
-                <td>1090</td>
-                <td>数码</td>
-                <td>手机</td>
-                <td>国产手机</td>
+                <!--            <td>1</td>
+                                <td>小米6S手机</td>
+                                <td>1090</td>
+                                <td>数码</td>
+                                <td>手机</td>
+                                <td>国产手机</td>
+                                <td>
+                                                              <span>
+                                                                  未申请
+                                                              </span>
+                                    <span>
+                                                                  申请中
+                                                              </span>
+                                    <span>
+                                                                  审核通过
+                                                              </span>
+                                    <span>
+                                                                  已驳回
+                                                              </span>
+                                </td>
+                -->
+                <td>{{entity.id}}</td>
+                <td>{{entity.goodsName}}</td>
+                <td>{{entity.price}}</td>
+                <td>{{itemCatAllList[entity.category1Id]}}</td>
+                <td>{{itemCatAllList[entity.category2Id]}}</td>
+                <td>{{itemCatAllList[entity.category3Id]}}</td>
                 <td>
-		                                  	<span>
-		                                  		未申请
-		                                  	</span>
-                    <span>
-		                                  		申请中
-		                                  	</span>
-                    <span>
-		                                  		审核通过
-		                                  	</span>
-                    <span>
-		                                  		已驳回
-		                                  	</span>
+                    {{status[entity.auditStatus]}}
                 </td>
+
                 <td class="text-center">
-                    <button class="btn bg-olive btn-xs" type="button">修改</button>
+                    <button class="btn bg-olive btn-xs" type="button">修改</button>  <!--todo： 未完成商品的修改和删除-->
                 </td>
             </tr>
             </tbody>
         </table>
         <!--数据列表/-->
+        <tm-pagination conf="paginationConf"></tm-pagination>
 
 
     </div>

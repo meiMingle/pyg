@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- 页面meta -->
+    <meta charset="utf-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <title>商品上下架</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+    <link href="../plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../plugins/adminLTE/css/AdminLTE.css" rel="stylesheet">
+    <link href="../plugins/adminLTE/css/skins/_all-skins.min.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+    <script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+
+    <!---->
+    <link href="../plugins/angularjs/pagination.css" rel="stylesheet">
+    <script src="../plugins/angularjs/angular.min.js"></script>
+    <script src="../plugins/angularjs/pagination.js"></script>
+    <!---->
+    <script src="../js/base_pagination.js"></script>
+    <script src="../js/service/uploadService.js"></script>
+    <script src="../js/service/specificationService.js"></script>
+    <script src="../js/service/typeTemplateService.js"></script>
+    <script src="../js/service/itemCatService.js"></script>
+    <script src="../js/service/goodsService.js"></script>
+    <script src="../js/controller/baseController.js"></script>
+    <script src="../js/controller/goodsController.js"></script>
+
+</head>
+
+<body class="hold-transition skin-red sidebar-mini" ng-app="pyg" ng-controller="goodsController"
+      ng-init="findItemCatList();searchEntity={auditStatus:'1'}">
+<!-- .box-body -->
+
+<div class="box-header with-border">
+    <h3 class="box-title">商品上下架</h3>
+</div>
+
+<div class="box-body">
+
+    <!-- 数据表格 -->
+    <div class="table-box">
+
+        <!--工具栏-->
+        <div class="pull-left">
+            <div class="form-group form-inline">
+                <div class="btn-group">
+                    <button class="btn btn-default" ng-click="marketGoods('1')" title="上架" type="button"><i
+                            class="fa fa-trash-o"></i> 上架
+                    </button>
+                    <button class="btn btn-default" ng-click="marketGoods('0')" title="下架" type="button"><i
+                            class="fa fa-check"></i> 下架
+                    </button>
+                    <button class="btn btn-default" onclick="window.location.reload();" title="刷新" type="button"><i
+                            class="fa fa-refresh"></i> 刷新
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="box-tools pull-right">
+            <div class="has-feedback">
+                状态：<select>
+                <option value="">全部</option>
+                <option value="0">未申请</option>
+                <option value="1">申请中</option>
+                <option value="2">审核通过</option>
+                <option value="3">已驳回</option>
+            </select>
+                商品名称：<input>
+                <button class="btn btn-default">查询</button>
+            </div>
+        </div>
+        <!--工具栏/-->
+
+        <!--数据列表-->
+        <table class="table table-bordered table-striped table-hover dataTable" id="dataList">
+            <thead>
+            <tr>
+                <th class="" style="padding-right:0px">
+                    <input class="icheckbox_square-blue" id="selall" type="checkbox">
+                </th>
+                <th class="sorting_asc">商品ID</th>
+                <th class="sorting">商品名称</th>
+                <th class="sorting">商品价格</th>
+                <th class="sorting">一级分类</th>
+                <th class="sorting">二级分类</th>
+                <th class="sorting">三级分类</th>
+                <th class="sorting">状态</th>
+                <th class="text-center">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="entity in list">
+                <td><input ng-click="updateSelection($event,entity.id)" type="checkbox"></td>
+                <!--            <td>1</td>
+                                <td>小米6S手机</td>
+                                <td>1090</td>
+                                <td>数码</td>
+                                <td>手机</td>
+                                <td>国产手机</td>
+                                <td>
+                                                              <span>
+                                                                  未申请
+                                                              </span>
+                                    <span>
+                                                                  申请中
+                                                              </span>
+                                    <span>
+                                                                  审核通过
+                                                              </span>
+                                    <span>
+                                                                  已驳回
+                                                              </span>
+                                </td>
+                -->
+                <td>{{entity.id}}</td>
+                <td>{{entity.goodsName}}</td>
+                <td>{{entity.price}}</td>
+                <td>{{itemCatAllList[entity.category1Id]}}</td>
+                <td>{{itemCatAllList[entity.category2Id]}}</td>
+                <td>{{itemCatAllList[entity.category3Id]}}</td>
+                <td>
+                    {{status[entity.auditStatus]}}
+                </td>
+
+                <td class="text-center">
+                    <button class="btn bg-olive btn-xs" type="button">修改</button>  <!--todo： 未完成商品的修改和删除-->
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <!--数据列表/-->
+        <tm-pagination conf="paginationConf"></tm-pagination>
+
+
+    </div>
+    <!-- 数据表格 /-->
+
+
+</div>
+<!-- /.box-body -->
+
+</body>
+
+</html>
