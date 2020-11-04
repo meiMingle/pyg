@@ -52,7 +52,7 @@
         <spring-data-redis.version>1.7.2.RELEASE</spring-data-redis.version>
         <xml-apis.version>1.4.01</xml-apis.version>
         <zkclient.version>0.1</zkclient.version>
-        <zookeeper.version>3.4.6</zookeeper.version>
+        <zookeeper.version>3.4.14</zookeeper.version>
     </properties>
 
     <!--依赖管理-->
