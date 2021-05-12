@@ -48,7 +48,7 @@
         <pagehelper.version>5.1.2</pagehelper.version><!--4.0.0以上版本，mybatis的配置文件SqlMapConfig.xm配置有所不同-->
         <solor-solrj.version>4.10.3</solor-solrj.version>
         <spring.version>4.2.5.RELEASE</spring.version>
-        <spring-security.version>4.1.0.RELEASE</spring-security.version>
+        <spring-security.version>5.2.10.RELEASE</spring-security.version>
         <spring-data-redis.version>1.7.2.RELEASE</spring-data-redis.version>
         <xml-apis.version>1.4.01</xml-apis.version>
         <zkclient.version>0.1</zkclient.version>
